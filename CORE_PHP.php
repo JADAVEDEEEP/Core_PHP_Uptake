@@ -10,7 +10,8 @@
 <body>
 <div class="container d-flex justify-content-center">
 
-  <div class="output">
+     <h1 class="mt-2">CORE_PHP_LEARNING</h1>
+  <div class="output mt-5">
   <h1>1. PHP SYNTAX WITH COMMENTS</h1>
 
 <?php 
@@ -172,8 +173,175 @@ echo strtoupper($facs);//converts strings in to the uppercase
 echo strtolower($facs);//converts in to small alphabests string 
 echo strrev($facs);//takes the all string in tio reverse 
 echo trim($facs);//it always avoaids the white spaces 
+//////////////////////////////////////////////////////////////////////DAY-2-CORE_PHP//////////////////////////////////
 ?>
-
+<h1 class="mt-2 text-center">DAY2_CORE_PHP</h1>
+<h5>Concatenate Strings</h5>
+<?php
+$h1="deep jadav <br>";
+$h2="jason Durelo";
+$z=$h1.$h2;
+echo $z;
+?>
+<h5>Slicing Strings</h5>
+<?php
+$h1="deep jadav <br>";
+$h2="jason Durelo";
+$z=$h1.$h2;
+echo substr($z,0,27);
+?>
+<h5>PHP Numbers</h5>
+<h6>INT-FLOAT-STRNG Numbers</h6>
+<?php
+$a1=10;
+$a2=20.30;
+$c="25";
+var_dump($a1,$a2,$c);
+?>
+<h6>INFINITY</h6>
+<?php
+$S=1.9e411;
+var_dump($S)
+?>
+<h5>PHP CASTING</h5>
+<?php
+$r=20;
+$r11=20;
+$r22=20;
+$r33=20;
+$r44=20;
+$r=(string)$r;
+$r11=(int)$r11;
+$r22=(bool)$r22;
+$r33=(float)$r33;
+$r44=(object)$r44;
+var_dump($r); 
+var_dump($r11); 
+var_dump($r22);
+var_dump($r33);
+var_dump($r44);
+?>
+<h5>PHP MATH FUNCTION</h5>
+<h6>PI FUNCTION</h6>
+<?php
+echo(pi());
+?>
+<h6>MIN AND MAX FUNCTION</h6>
+<?php
+$deeps = array(10,20,30,40,50,-100);
+echo(min($deeps));
+$deepsa = array(10,20,30,40,50,-100);
+echo(max($deepsa))
+?>
+<h6>MATH ABS</h6>
+<?php
+echo(abs(-6.7))
+?>
+<h6>MATH SQRT</h6>
+<?php
+echo(sqrt(64))
+?>
+<h6>MATH ROUND</h6>
+<?php
+echo(round(6.5))
+?>
+<h6>MATH RAND</h6>
+<?php
+echo(rand(10,30))
+?>
+<h5>PHP CONSTANTS</h5>
+<?php
+ const deep ="my name is volvo";
+ echo deep;
+?>
+<h5>PHP OPERATORS</h5>
+<h6>Arithmetic Operators</h6>
+<?php
+$ab=30;
+$bc=50;
+echo($ab+$bc);
+echo"<br>";
+echo($ab-$bc);
+echo"<br>";
+echo($ab*$bc);
+echo"<br>";
+echo($ab/$bc);
+echo"<br>";
+echo($ab%$bc);
+echo"<br>";
+echo($ab ** $bc);
+?>
+<h6>Assignment Operators</h6>
+<?php
+$ab=30;
+$bc=50;
+echo($ab+$bc);
+echo"<br>";
+echo($ab-$bc);
+echo"<br>";
+echo($ab*$bc);
+echo"<br>";
+echo($ab/$bc);
+echo"<br>";
+echo($ab%$bc);
+echo"<br>";
+echo($ab ** $bc);
+?>
+<h6>Comphersion Operators</h6>
+<?php
+$ab=30;
+$bc=50;
+var_dump($ab==$bc);//Equal to
+echo"<br>";
+var_dump($ab===$bc);//Identical 
+echo"<br>";
+var_dump($ab!=$bc);//Not Equal to
+echo"<br>";
+var_dump($ab>$bc);//Greater than
+echo"<br>";
+var_dump($ab<$bc);//less than
+echo"<br>";
+var_dump($ab>=$bc);//Greater than Equal to
+echo"<br>";
+var_dump($ab<=$bc);//Less than Equal to
+?>
+<h6> PHP Increment / Decrement Operators</h6>
+<?php
+$ab=30;
+$bc=50;
+var_dump(++$bc);//preiecremanret 
+echo"<br>";
+var_dump(--$bc);//preDecremanret 
+?>
+<h6>Logical Operators</h6>
+<?php
+$ab=30;
+$bc=50;
+if($ab>30 && $bc<40)
+{
+  echo"true";
+}else{
+  echo"false";
+}
+echo"<br>";
+if($ab>30 || $bc<40)
+{
+  echo"true";
+}else{
+  echo"false";
+} 
+echo"<br>";
+if (!($ab == 90)) {
+  echo "Hello world!";
+}
+?>
+<h6>Conditional Assignment Operators</h6>
+<?php
+$ajs=10;
+$b=$ajs<10?"true":"false";
+print ("Value of b is : " . $b);
+?>
+<h6>PHP Conditional Statements </h6>
 
   </div>
   </div>
