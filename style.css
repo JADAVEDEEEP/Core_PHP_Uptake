@@ -1,6 +1,11 @@
 
-.output {
-  position: absolute;
-  padding: 50px;
- 
+.container{
+  border: 5px outset red;
+  background-color: lightblue;    
+  
+}
+
+h1{
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  color: blue;
 }

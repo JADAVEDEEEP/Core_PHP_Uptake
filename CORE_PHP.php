@@ -4,13 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+body  { background-image: linear-gradient(to right, rgba(255,0,0,0), rgba(255,0,0,1));}
+h1   {color: blue;}
+h1 {font-family: 'Times New Roman', Times, serif;}
+h5 {color:slategrey;}
+h5{font-weight: bold;}
+h5 {font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif}
+p    {color: red;}
+h1 {
+  box-shadow: 10px 5px 5px red; 
+}
+h2{
+  box-shadow: 10px 5px 5px white;
+  color: linear-gradient(to right, rgba(255,0,0,0), rgb(245, 34, 34));
+}
+</style>
 </head>
 <body>
-<div class="container d-flex justify-content-center">
+<div class="container">
 
-     <h1 class="mt-2">CORE_PHP_LEARNING</h1>
+     <h2 class="mt-2">DAY_1_CORE_PHP_LEARNING</h2>
   <div class="output mt-5">
   <h1>1. PHP SYNTAX WITH COMMENTS</h1>
 
@@ -175,35 +190,35 @@ echo strrev($facs);//takes the all string in tio reverse
 echo trim($facs);//it always avoaids the white spaces 
 //////////////////////////////////////////////////////////////////////DAY-2-CORE_PHP//////////////////////////////////
 ?>
-<h1 class="mt-2 text-center">DAY2_CORE_PHP</h1>
-<h5>Concatenate Strings</h5>
+<h2 class="mt-2 text-center">DAY2_CORE_PHP</h2>
+<h1>7. Concatenate Strings</h1>
 <?php
 $h1="deep jadav <br>";
 $h2="jason Durelo";
 $z=$h1.$h2;
 echo $z;
 ?>
-<h5>Slicing Strings</h5>
+<h1>8. Slicing Strings</h1>
 <?php
 $h1="deep jadav <br>";
 $h2="jason Durelo";
 $z=$h1.$h2;
 echo substr($z,0,27);
 ?>
-<h5>PHP Numbers</h5>
-<h6>INT-FLOAT-STRNG Numbers</h6>
+<h1>9. PHP Numbers</h1>
+<h5>INT-FLOAT-STRNG Numbers</h5>
 <?php
 $a1=10;
 $a2=20.30;
 $c="25";
 var_dump($a1,$a2,$c);
 ?>
-<h6>INFINITY</h6>
+<h5>INFINITY</h5>
 <?php
 $S=1.9e411;
 var_dump($S)
 ?>
-<h5>PHP CASTING</h5>
+<h1>10. PHP CASTING</h1>
 <?php
 $r=20;
 $r11=20;
@@ -221,41 +236,41 @@ var_dump($r22);
 var_dump($r33);
 var_dump($r44);
 ?>
-<h5>PHP MATH FUNCTION</h5>
-<h6>PI FUNCTION</h6>
+<h1>11. PHP MATH FUNCTION</h1>
+<h5>PI FUNCTION</h5>
 <?php
 echo(pi());
 ?>
-<h6>MIN AND MAX FUNCTION</h6>
+<h5>MIN AND MAX FUNCTION</h5>
 <?php
 $deeps = array(10,20,30,40,50,-100);
 echo(min($deeps));
 $deepsa = array(10,20,30,40,50,-100);
 echo(max($deepsa))
 ?>
-<h6>MATH ABS</h6>
+<h5>MATH ABS</h5>
 <?php
 echo(abs(-6.7))
 ?>
-<h6>MATH SQRT</h6>
+<h5>MATH SQRT</h5>
 <?php
 echo(sqrt(64))
 ?>
-<h6>MATH ROUND</h6>
+<h5>MATH ROUND</h5>
 <?php
 echo(round(6.5))
 ?>
-<h6>MATH RAND</h6>
+<h5>MATH RAND</h5>
 <?php
 echo(rand(10,30))
 ?>
-<h5>PHP CONSTANTS</h5>
+<h1>12. PHP CONSTANTS</h1>
 <?php
  const deep ="my name is volvo";
  echo deep;
 ?>
-<h5>PHP OPERATORS</h5>
-<h6>Arithmetic Operators</h6>
+<h1>13. PHP OPERATORS</h5>
+<h5>Arithmetic Operators</h5>
 <?php
 $ab=30;
 $bc=50;
@@ -271,7 +286,7 @@ echo($ab%$bc);
 echo"<br>";
 echo($ab ** $bc);
 ?>
-<h6>Assignment Operators</h6>
+<h5>Assignment Operators</h5>
 <?php
 $ab=30;
 $bc=50;
@@ -287,7 +302,7 @@ echo($ab%$bc);
 echo"<br>";
 echo($ab ** $bc);
 ?>
-<h6>Comphersion Operators</h6>
+<h5>Comphersion Operators</h5>
 <?php
 $ab=30;
 $bc=50;
@@ -305,7 +320,7 @@ var_dump($ab>=$bc);//Greater than Equal to
 echo"<br>";
 var_dump($ab<=$bc);//Less than Equal to
 ?>
-<h6> PHP Increment / Decrement Operators</h6>
+<h5> PHP Increment / Decrement Operators</h5>
 <?php
 $ab=30;
 $bc=50;
@@ -313,7 +328,7 @@ var_dump(++$bc);//preiecremanret
 echo"<br>";
 var_dump(--$bc);//preDecremanret 
 ?>
-<h6>Logical Operators</h6>
+<h5>Logical Operators</h5>
 <?php
 $ab=30;
 $bc=50;
@@ -335,16 +350,192 @@ if (!($ab == 90)) {
   echo "Hello world!";
 }
 ?>
-<h6>Conditional Assignment Operators</h6>
+<h5>Conditional Assignment Operators</h5>
 <?php
 $ajs=10;
 $b=$ajs<10?"true":"false";
 print ("Value of b is : " . $b);
+////////////////////////////////////////////////////////////////////DAY-3_CORE_PHP////////////////////////////////////////////
 ?>
-<h6>PHP Conditional Statements </h6>
+<h2 class="mt-3">DAY_3_CORE_PHP</h2>
+<h1 class="mt-5">14. CONDTINAL STATEMETNS</h1>
+<h5 class="mt-5">IF STATAMENT</h5>
+<?php
+$person="deep jadav";
+$age=25;
+if($person="deep jadav" && $age>25)
+{
+  echo"You are Login";
+}else{
+  echo"not Allowed";
+}
+?>
+<h5 class="mt-2">IF OPERATORS</h5>
+<?php
+$person=100;
+$age=100;
+if($age == 15)
+{
+  echo"You are Adult";
+}else{
+  echo"not Adult <br>";
+}
+if($age === $person)
+{
+  echo"same same<br>";
+}else{
+  echo"diffrent";
+}
+if($age != 15)
+{
+  echo"valid Not operator<br>";
+}else{
+  echo"Not Right Operator";
+}
+if($age >15)
+{
+  echo"right Age<br>";
+}else{
+  echo"Not Right";
+}
+if($age<100)
+{
+  echo"right Age";
+}else{
+  echo"Not Right";
+}
+?>
+<h5 class="mt-2">IF-ELSE STATEMENT</h5>
+<?php
+$person="deep jadav";
+$age=25;
+if($person="deep jadav" && $age>25)
+{
+  echo"You are Login";
+}else{
+  echo"not Allowed";
+}
+?>
+<h5 class="mt-2">IF-ELSE SHORT HAND</h5>
+<?php
+$d=10;
+if($d<=10)echo"kese he be";
+?>
+<h5 class="mt-2">NESTED IF-ELSE</h5>
+<?php
+$age=12;
+if($age<=12){
+  echo "correct age <br>";
+  if($age=10){
+   echo"Hakuna Matata";
+  }else{
+    echo"Matata Hakuna";
+  }
+  
+}
+?>
+<h1 class="mt-5">15. SWTICH STATEMENT</h1>
+<?php
+$swith="red ";
+switch($swith){
+  case "red":
+    echo "Your favorite color is red!";
+    break;
+  case "blue":
+    echo "Your favorite color is blue!";
+    break;
+  case "green":
+    echo "Your favorite color is green!";
+    break;
+  default:
+    echo "Your favorite color is neither red, blue, nor green!";
+}
+?>
+<h1 class="mt-5">16. PHP LOOPS</h1>
+<h5 class="mt-3">WHILE LOOP</h5>
+<?php
+$i=1;
+while($i<6){
+echo "*";
+$i++;
+}
+?>
+<h5 class="mt-3">DO WHILE</h5>
+<?php
+$i = 1;
+do {
+  echo $i;
+  $i++;
+} while ($i < 6);
+?>  
+<h5 class="mt-3">FOR LOOP</h5>
+<?php
+for($i=0;$i<=5;$i++)
+{
+  for($j=0;$j<=$i;$j++){
+    echo"*";
+  }
+  echo "</br>";
+}
+?>
+<h5 class="mt-3">FOR EACH LOOP</h5>
+<?php
+$colors=array('lala','lajapat','ray','jay','ho');
+foreach ($colors as $x) {
+echo "$x <br>";
+}
+?>
+<h5 class="mt-3">BREAK STATEMENT</h5>
+<?php
+for($i=0;$i<=5;$i++)
+{
+ if($i==3){
+  break;
+ }
+ echo"$i";
+}
+?>
+<h5 class="mt-3">COUNTINIUE STATEMENT</h5>
+<?php
+for($i=0;$i<=5;$i++)
+{
+ if($i==3){
+  continue;
+ }
+ echo"$i";
+}
+?>
+<h1 class="mt-5">17. PHP FUNCTION</h1>
+<h5 class="mt-3">Simple Addtion using passing argument and paremeter directly to the function and alos rertun the value so almost all secnario off the function would be cover inside the exectution </h5>
+<?php
+function mytest($a=10,$b=20){
+ $z1=$a+$b;
+ return $z1;
+}
+echo(mytest());
+?>
+<h1 class="mt-5">18. PHP ARRAYS</h1>
+<h5 class="mt-3">NUMBER ARRAY</h5>
+<?php
+$car=array(10,20,30,40,50);
+foreach ($car as $off) {
+  echo "$off <br>";
+}
 
+?>
+<h5 class="mt-3">STRING ARRAY</h5>
+<?php
+$car=array("DEEP","ANNU","MODI");
+foreach ($car as $off) {
+  echo "$off <br>";
+}
+?>
+<h5 class="mt-3">ARRAY FUNCTION</h5>
+<?php
+$car=array(10,20,30,40,50);
+echo(count($car));
+?>
   </div>
   </div>
-</div>
 </body>
 </html>
