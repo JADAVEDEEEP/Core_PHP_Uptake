@@ -6,9 +6,13 @@
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
-body  { background-image: linear-gradient(to right, rgba(255,0,0,0), rgba(255,0,0,1));}
-h1   {color: blue;}
-h1 {font-family: 'Times New Roman', Times, serif;}
+body  {  background-color: black;
+  font-family: Verdana, sans-serif;
+  font-size: 16px;
+  color: gray;  }
+h1 { font-family: Georgia, serif;
+  font-size: 40px;
+  color: white;}
 h5 {color:slategrey;}
 h5{font-weight: bold;}
 h5 {font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif}
@@ -20,12 +24,94 @@ h2{
   box-shadow: 10px 5px 5px white;
   color: linear-gradient(to right, rgba(255,0,0,0), rgb(245, 34, 34));
 }
+.reg{
+  color: red;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+form{
+  margin:10% auto 0 auto;
+	padding:30px;
+	width:400px;
+	height:auto;
+	overflow:hidden;
+	background:white;
+	border-radius:10px;
+}
+form label {
+	font-size:14px;
+	color:darkgray;
+	cursor:pointer;
+}
+
+form label,
+form input {
+	float:left;
+	clear:both;
+}
+
+form input {
+	margin:15px 0;
+	padding:15px 10px;
+	width:100%;
+	outline:none;
+	border:1px solid #bbb;
+	border-radius:20px;
+	display:inline-block;
+	-webkit-box-sizing:border-box;
+	   -moz-box-sizing:border-box;
+	        box-sizing:border-box;
+    -webkit-transition:0.2s ease all;
+	   -moz-transition:0.2s ease all;
+	    -ms-transition:0.2s ease all;
+	     -o-transition:0.2s ease all;
+	        transition:0.2s ease all;
+}
+
+form input[type=text]:focus,
+form input[type="password"]:focus {
+	border-color:cornflowerblue;
+}
+
+input[type=submit] {
+	padding:15px 50px;
+	width:auto;
+	background:#1abc9c;
+	border:none;
+	color:white;
+	cursor:pointer;
+	display:inline-block;
+	clear:right;
+	-webkit-transition:0.2s ease all;
+	   -moz-transition:0.2s ease all;
+	    -ms-transition:0.2s ease all;
+	     -o-transition:0.2s ease all;
+	        transition:0.2s ease all;
+}
+
+#logo {
+	margin:0 auto;
+	width:200px;
+	font-family:'Lily Script One', cursive;
+	font-size:60px;
+	font-weight:bold;
+	text-align:center;
+	color:lightgray;
+	-webkit-transition:0.2s ease all;
+	   -moz-transition:0.2s ease all;
+	    -ms-transition:0.2s ease all;
+	     -o-transition:0.2s ease all;
+	        transition:0.2s ease all;
+}
+
+#logo:hover {
+	color:cornflowerblue;
+}
 </style>
 </head>
 <body>
-<div class="container">
-
-     <h2 class="mt-2">DAY_1_CORE_PHP_LEARNING</h2>
+<div class="container shadow-lg">
+      <h2 class="reg mt-5">PHP TUTORIAL</h2>
+     <h2 class="mt-4">DAY_1_CORE_PHP_LEARNING</h2>
   <div class="output mt-5">
   <h1>1. PHP SYNTAX WITH COMMENTS</h1>
 
@@ -534,7 +620,158 @@ foreach ($car as $off) {
 <?php
 $car=array(10,20,30,40,50);
 echo(count($car));
+////////////////////////////////////////////////////////DAY-4-PHP////////////////////////////////////
 ?>
+<h2 class="mt-3">DAY_4_CORE_PHP</h2>
+<h5 class="mt-5">INDEXED ARRAY</h5>
+<?php
+$cas=array('<br>deep','kal','jason');
+var_dump($cas)
+?>
+<h5 class="mt-3">ASSOOCIATIVE ARRAY</h5>
+<?php 
+$cas1=array('Name'=>'Deep','Age'=>'24');
+echo $cas1['Name'];
+echo $cas1['Age'];
+?>
+<h5 class="mt-3">CREATE ARRAY</h5>
+<?php
+$cast=array(
+  'Name'=>'jadav deep',
+   'Age'=>24,
+   'city'=>'Ahemdabad'
+);
+  var_dump($cast); 
+?>
+<h5 class="mt-3">UPDATE ARRAY</h5>
+<?php
+$cast=array(
+  'Name'=>'jadav deep',
+   'Age'=>24,
+   'city'=>'Ahemdabad'
+);
+  $cast['Name']='jagrtu';
+  var_dump($cast); 
+?>
+<h5 class="mt-3">ADD ARRAY</h5>
+<?php
+$case=array('deep','jadav');
+array_push($case,'jason','nandan');
+var_dump($case);
+?>
+<h5 class="mt-3">REMOVE ARRAY</h5>
+<?php
+$case=array('deep','jadav');
+var_dump(array_splice($case,1,1));
+?>
+<h5 class="mt-3">SORTING ARRAYS ASC</h5>
+<?php
+$arr = array(40, 61, 2, 22, 13);
+sort($arr);
+print_r($arr);
+?>
+<h5 class="mt-3">SORTING ARRAYS DESC</h5>
+<?php
+$arr = array(40, 61, 2, 22, 13);
+rsort($arr);
+print_r($arr);
+?>
+<h5 class="mt-3">MULTIDIMATIONAL ARRAYS</h5>
+<?php
+$cad=array(array( 'Name'=>'jason'),array('Age'=>25));
+print_r($cad);
+?>
+<h1 class="mt-5">19. PHP SUPERGLOBAL</h1>
+<h5 class="mt-5">$GLOBAL</h5>
+<?php
+$x=75;
+function myfunction(){
+  echo $GLOBALS['x'];
+}
+myfunction();
+?>
+<h5 class="mt-3">$_SERVER</h5>
+<?php
+echo $_SERVER['PHP_SELF'];
+echo "<br>";
+echo $_SERVER['SERVER_NAME'];
+echo "<br>";
+echo $_SERVER['HTTP_HOST'];
+echo "<br>";
+echo $_SERVER['HTTP_REFERER'];
+echo "<br>";
+echo $_SERVER['HTTP_USER_AGENT'];
+echo "<br>";
+echo $_SERVER['SCRIPT_NAME'];
+?>
+<h5 class="mt-3">$_REQUEST</h5>
+<form method="post" action="demo_request.php" class="border text-center">
+  <div class="mt-5 mb-5 shadow-lg">
+  Name: <input type="text" name="fname">
+  <input type="submit" class="btn btn-danger">
+</form>
+</div>
+<h5 class="mt-3">$_POST</h5>
+<form method="post" action="demo_request.php" class="border text-center">
+  <div class="mt-5 mb-5 shadow-lg">
+  Name: <input type="text" name="fname">
+  <input type="submit" class="btn btn-danger">
+</form>
+</div>
+<h5 class="mt-3">$_GET</h5>
+<form method="post" action="demo_request.php" class="border text-center">
+  <div class="mt-5 mb-5 shadow-lg">
+  Name: <input type="text" name="fname">
+  <input type="submit" class="btn btn-danger">
+</form>
+</div>
+<h1 class="mt-5">20. PHP REGULAR EXPRESSION</h1>
+<h5 class="mt-4">PREG_MATCH</h5>
+<?php
+$deep="Deep Jadav";
+$parrten="/deep/i";
+echo preg_match($parrten,$deep)
+?>
+<h5 class="mt-4">PREG_MATCH_ALL</h5>
+<?php
+$str = "The rain in SPAIN falls mainly on the plains.";
+$pattern = "/ain/i";
+echo preg_match_all($pattern, $str);
+?>
+<h5 class="mt-4">PREG_MATCH_ALL</h5>
+<?php
+$str = "The rain in SPAIN falls mainly on the plains!";
+$pattern = "/SPAIN/i";
+echo preg_replace($pattern,'INDIA', $str);
+?>
+<h2 class="reg mt-5">PHP FORMS</h2>
+<h1 class="mt-5">21. PHP FORM HANDLING</h1>
+
+<form action="demo_request.php" method="post" >
+<h3 id="logo"> Register</h3>
+  <div class="form-group mt-4">
+  <div class="form-group mt-2">
+    <label for="exampleInputPassword1">Name</label>
+    <input type="text" class="form-control" name="name">
+  </div>
+  <div class="form-group mt-2">
+    <label for="exampleInputPassword1">Age</label>
+    <input type="text" class="form-control" name="age">
+  </div>
+  <div class="form-group mt-2">
+    <label for="exampleInputPassword1">Phone Numbers</label>
+    <input type="number" class="form-control" name="phonenum">
+  </div>
+  <div class="form-group mt-2">
+    <label for="exampleInputEmail1">Email address</label>
+    <input type="email" class="form-control" name="email">
+  </div>
+  <div class="form-group mt-2">
+    <label for="exampleInputPassword1">Password</label>
+    <input type="password" class="form-control" name="fpassword">
+  </div>
+  <input type="submit" class="btn btn-danger mt-3">
+</form>
   </div>
   </div>
 </body>
