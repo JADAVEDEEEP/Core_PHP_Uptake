@@ -744,35 +744,64 @@ $str = "The rain in SPAIN falls mainly on the plains!";
 $pattern = "/SPAIN/i";
 echo preg_replace($pattern,'INDIA', $str);
 ?>
-<h2 class="reg mt-5">PHP FORMS</h2>
+ <!----------------------------------------------------------------DAY_5_CORE_PHP------------------------------------------------------->
+  
+<h2 class="mt-4">DAY_5_CORE_PHP_LEARNING</h2>
+<h2 class="reg mt-5">PHP FORMS INFORMATION</h2>
 <h1 class="mt-5">21. PHP FORM HANDLING</h1>
+<p class="text-white mt-4 opacity-40 opacity-75">The PHP superglobals $_GET and $_POST are used to collect form-data.
+When the user fills out the form above and clicks the submit button, the form data is sent for processing to a PHP file named "welcome.php". The form data is sent with the HTTP POST method.
 
-<form action="demo_request.php" method="post" >
-<h3 id="logo"> Register</h3>
-  <div class="form-group mt-4">
-  <div class="form-group mt-2">
-    <label for="exampleInputPassword1">Name</label>
-    <input type="text" class="form-control" name="name">
-  </div>
-  <div class="form-group mt-2">
-    <label for="exampleInputPassword1">Age</label>
-    <input type="text" class="form-control" name="age">
-  </div>
-  <div class="form-group mt-2">
-    <label for="exampleInputPassword1">Phone Numbers</label>
-    <input type="number" class="form-control" name="phonenum">
-  </div>
-  <div class="form-group mt-2">
-    <label for="exampleInputEmail1">Email address</label>
-    <input type="email" class="form-control" name="email">
-  </div>
-  <div class="form-group mt-2">
-    <label for="exampleInputPassword1">Password</label>
-    <input type="password" class="form-control" name="fpassword">
-  </div>
-  <input type="submit" class="btn btn-danger mt-3">
-</form>
-  </div>
-  </div>
+To display the submitted data you could simply echo all the variables.
+
+The "welcome.php" looks like this:
+</p>
+  <h1 class="mt-5">22. PHP FORM VALIDATION</h1>
+  The HTML form we will be working at in these chapters, contains various input fields: required and optional text fields, radio buttons, and a submit button:
 </body>
+ <h1 class="mt-5">23. PHP FORM REQIRED</h1>
+ <P class="text-white opacity-75">From the validation rules table on the previous page, we see that the "Name", "E-mail", and "Gender" fields are required. These fields cannot be empty and must be filled out in the HTML form.
+
+Field	Validation Rules
+Name	Required. + Must only contain letters and whitespace
+E-mail	Required. + Must contain a valid email address (with @ and .)
+Website	Optional. If present, it must contain a valid URL
+Comment	Optional. Multi-line input field (textarea)
+Gender	Required. Must select one
+In the previous chapter, all input fields were optional.
+
+In the following code we have added some new variables: $nameErr, $emailErr, $genderErr, and $websiteErr. These error variables will hold error messages for the required fields. We have also added an if else statement for each $_POST variable. This checks if the $_POST variable is empty (with the PHP empty() function). If it is empty, an error message is stored in the different error variables, and if it is not empty, it sends the user input data through the test_input() function:</P>
+<h1 class="mt-5">24. PHP FORM URL/NAME</h1>
+<h5 class="mt-4">VALIDATE_NAME</h5>
+<P class="text-white opacity-75">
+The easiest and safest way to check whether an email address is well-formed is to use PHP's filter_var() function.
+
+In the code below, if the e-mail address is not well-formed, then store an error message:
+
+$email = test_input($_POST["email"]);
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+  $emailErr = "Invalid email format";
+}
+</P>
+<h5 class="mt-4">VALIDATE_EMAIL</h5>
+<P class="text-white opacity-75">
+The easiest and safest way to check whether an email address is well-formed is to use PHP's filter_var() function.
+
+In the code below, if the e-mail address is not well-formed, then store an error message:
+
+$email = test_input($_POST["email"]);
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+  $emailErr = "Invalid email format";
+}
+</P>
+<h5 class="mt-4">PHP - Validate URL</h5>
+<P class="text-white opacity-75">
+The code below shows a way to check if a URL address syntax is valid (this regular expression also allows dashes in the URL). If the URL address syntax is not valid, then store an error message:
+
+$website = test_input($_POST["website"]);
+if (!preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i",$website)) {
+  $websiteErr = "Invalid URL";
+}
+</P>
+
 </html>
