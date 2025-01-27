@@ -16,7 +16,7 @@ h1 { font-family: Georgia, serif;
 h5 {color:slategrey;}
 h5{font-weight: bold;}
 h5 {font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif}
-p    {color: red;}
+
 h1 {
   box-shadow: 10px 5px 5px red; 
 }
@@ -803,5 +803,50 @@ if (!preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-
   $websiteErr = "Invalid URL";
 }
 </P>
+<!----------------------------------------------------------------DAY_6_CORE_PHP------------------------------------------------------->
+<h2 class="mt-4">DAY_6_CORE_PHP_LEARNING</h2>
+<h2 class="reg mt-5">PHP ADVANCE TOPICS</h2>
+<h1 class="mt-4">25. DATE AND TIME </h1>
+<?php
+echo "Today is ".date("y/m/d")."<br>";
+echo "Today is ".date("y-m-d")."<br>";
+echo "Today is ".date("y.m.d")."<br>";
 
+ date_default_timezone_set("Asia/kolkata");
+echo "The time is " . date("h:i:sa");
+?>
+<h1 class="mt-4">26. INCLUDE AND REQUIRED </h1>
+<p class=" mt-3 text-white opacity-50">INCLUDE</p>
+<?php include 'includeExample.php'?>
+<p class=" mt-3 text-white opacity-50">REQUIRED</p>
+<?php require 'includeExample.php' ?>
+<h1 class="mt-4">27. FILE HANDLING </h1>
+<h5 class="mt-4">READFILE</h5>
+<?php
+echo readfile("FileHandling.txt")
+?>
+<h1 class="mt-4">28. FILE READ/OPEN</h1>
+<?php
+$deep=fopen("FileHandling.txt",'r');
+echo fread($deep,filesize("FileHandling.txt"));
+fclose($deep);
+?>
+<h1 class="mt-4">28. FILE CREATE/WRITE</h1>
+<?php
+$myfile = fopen("newfile.txt", "w");
+$txt = "John Doe";
+fwrite($myfile, $txt);
+fclose($myfile);
+?>
+<h1 class="mt-4">29. FILE UPLOAD</h1>
+<form method="post" enctype="multipart/form-data" action="files.php">
+  <input type="file" name="myfile">
+  <input type="submit" name="upload" value="send">
+</form>
+<h1 class="mt-4">30. PHP COOKIES</h1>
+<p>A cookie is often used to identify a user. A cookie is a small file that the server embeds on the user's computer. Each time the same computer requests a page with a browser, it will send the cookie too. With PHP, you can both create and retrieve cookie values.
+</p>
+<h1 class="mt-4">31. PHP SESSION</h1>
+<?php
+?>
 </html>
