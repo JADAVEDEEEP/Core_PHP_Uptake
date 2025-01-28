@@ -846,7 +846,80 @@ fclose($myfile);
 <h1 class="mt-4">30. PHP COOKIES</h1>
 <p>A cookie is often used to identify a user. A cookie is a small file that the server embeds on the user's computer. Each time the same computer requests a page with a browser, it will send the cookie too. With PHP, you can both create and retrieve cookie values.
 </p>
+<!----------------------------------------------------------------DAY_7_CORE_PHP------------------------------------------------------->
+<h2 class="mt-3">DAY_7_CORE_PHP</h2>
 <h1 class="mt-4">31. PHP SESSION</h1>
+<P>FileName : Session</P>
+<p>
+session_start();
+"here we started the session storing User name";
+$_SESSION['username']="deep jadav";
+echo "Sesion has been Started";
+</p>
+<P>FileName : Session2</P>
+<p>
+session_start();
+"Here we Stored the Username that Session gived"
+
+session_start();
+echo "welocme ".$_SESSION['username']
+</p>
+P>FileName : SessionLogout</P>
+<p>
+session_start();
+"Here we Unset the session and destory the it"
+session_start();
+session_unset();
+session_destroy();
+echo "you have been log out" 
+</p>
+<h1 class="mt-4">32. PHP FILTERTING</h1>
+<p>if we take @ then it will be Invalid either is valid</p>
 <?php
+$email="jadavdeep560.com";
+$vemail=filter_var($email,FILTER_VALIDATE_EMAIL);
+if($vemail==false)
+{
+  echo"invalid";
+}else{
+  echo"valid email".$vemail;
+}
 ?>
+<h1 class="mt-4">33. PHP CALLBACK FUNCTIONS</h1>
+<?php
+function Addition($abs=10,$bsb=20){
+ $z=$abs+$bsb;
+ return $z;
+}
+echo(call_user_func('Addition'));
+?>
+<h1 class="mt-4">34. PHP AND JSON</h1>
+<h5 class="mt-4">JSON_ENCODE </h5>
+<?php
+$fask=array("a"=>10,'b'=>20);
+echo json_encode($fask)
+?>
+<h5 class="mt-4">JSON_dECODE </h5>
+<?php
+$jsonobj = '{"Peter":35,"Ben":37,"Joe":43}';
+print_r(json_decode($jsonobj));
+?>
+<h1 class="mt-4">35. PHP Expection</h1>
+<?php
+function divide($dividend, $divisor) {
+  if($divisor == 0) {
+    throw new Exception("Division by zero");
+  }
+  return $dividend / $divisor;
+}
+
+try {
+  echo divide(5, 0);
+} catch(Exception $e) {
+  echo "Unable to divide. ";
+} finally {
+  echo "Process complete.";
+}
+?>
+<h1 class="mt-4">36. PHP </h1>
 </html>
