@@ -921,5 +921,121 @@ try {
   echo "Process complete.";
 }
 ?>
-<h1 class="mt-4">36. PHP </h1>
+<!----------------------------------------------------------------DAY_7_CORE_PHP------------------------------------------------------->
+<h2 class="mt-3">DAY_8_CORE_PHP</h2>
+<h2 class="reg mt-5">PHP OOP</h2>
+<h1 class="mt-4">36. WHAT IS OOP </h1>
+<?php
+//USING VARAIBLE DACLRATION 
+class deep{
+  public $fax='deep jadav is my name';
+}
+$dep=new deep();
+echo $dep->fax;
+
+//USING FUNCTION 
+
+class addtion{
+  function addtion(){
+    return 10+20;
+  }
+}
+$add = new addtion();
+echo $add->addtion();
+?>
+<h1 class="mt-4">37. CLASS AND OBJECT </h1>
+<h5 class="mt-4">CLASS AND OBJECT WITH MULTIPLE FUNCTION or METHODS </h5>
+<?php
+class Auth{
+  function Teacher(){
+    echo "i am teacher<br>";
+  }
+  function Student(){
+    echo "i am Student<br>";
+  }
+  function Management(){
+    echo "i am Mnagament<br>";
+  }
+}
+$Aut=new Auth();
+echo $Aut->Management();
+echo $Aut->Student();
+echo $Aut->Teacher();
+
+class kas{
+  public $namesd="bachao mije iss jungl se";
+}
+$obj=new kas();
+echo $obj->namesd;
+?>
+<h5 class="mt-4">CLASS AND OBJECT WITH PROPTIES  </h5>
+<?php
+class propties{
+ public $name="Deep jadav";
+ function getName(){
+  echo  $this->name;
+ }
+ function UpdateName(){
+  echo $this->name="Monster";
+ }
+}
+$p1=new propties();
+echo $p1->name;
+echo "<br>";
+echo $p1->getName();
+echo "<br>";
+echo $p1->UpdateName();
+?>
+<h1 class="mt-4">38. CLASS AND OBJECT CONSTRUCTOR FUNCTION </h1>
+<?php
+ class gas{
+  public $marks;
+  public $age;
+  public function __construct($marks,$age)
+  {
+    $this->marks = $marks;
+    $this->age = $age;
+  }
+}
+  $k1=new gas("deep",25);
+  echo $k1->age;
+  echo"<br>";
+  echo $k1->marks;
+?>
+<h1 class="mt-4">39. CLASS AND OBJECT DESTRUCTOR FUNCTION </h1>
+<?php
+class jason{
+  public $Yamraj ="Yamraj : Vats Tumara Waqt Ho Gaya Prasthan Ka hum mot ke Devta he";
+  function _construct($Yamraj){
+    $this->Yamraj = $Yamraj;
+  }
+  public $mahakal ="Shivji :Madira Pan Kam kiya karo Yamraj KIske samne Khade ho woh to Dekh lo Hum Devo ke Dev Mahakal he Jivan aur mrtuyu dono Hamare andar vas karta he aur  hume khatam karega";
+  public $mahakalthirdEye="yamraj ji Destory ho gaye";
+  function _destruct($mahakal,$mahakalthirdEye){
+    $this->$mahakal= $mahakal;
+    $this->$mahakalthirdEye= $mahakalthirdEye;
+  }
+}
+$has=new jason();
+echo $has->Yamraj;
+echo "<br>";
+echo $has->mahakal;
+echo "<br>";
+echo $has->mahakalthirdEye
+?>
+<h1 class="mt-4">40. CLASS AND OBJECT WITH ACESS MODIFIRES </h1>
+<?php
+class AcessModfiers{
+  public $iam ="Public : i am accisable from everywhere";
+  private $dance="Private : i am confidential";
+  protected $jsu ="Protected : kon ho tum sab Hum sabKuch he";
+}
+$acces=new AcessModfiers();
+echo $acces->iam;
+echo $acces->dance;
+echo $acces->jsu;
+
+?>
+
 </html>
+
