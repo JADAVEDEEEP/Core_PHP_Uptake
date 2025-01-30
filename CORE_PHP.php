@@ -1032,10 +1032,131 @@ class AcessModfiers{
 }
 $acces=new AcessModfiers();
 echo $acces->iam;
-echo $acces->dance;
-echo $acces->jsu;
-
+// echo $acces->dance;
+// echo $acces->jsu;
 ?>
-
+<!----------------------------------------------------------------DAY_7_CORE_PHP------------------------------------------------------->
+<h2 class="mt-3">DAY_9_CORE_PHP</h2>
+<h1 class="mt-4">41. CLASS AND OBJECT WITH INHERITANCE</h1>
+<?php
+class Bank{
+  public $Name;
+  public $Branch;
+  function __construct($Name,$Branch)
+  {
+    $this->Branch=$Branch;
+    $this->Name=$Name;
+  }
+  function info(){
+    echo "Bank Name : {$this->Name} <br> Branch : {$this->Branch}";
+  }
+}
+class SBI extends Bank{
+    public $Adress;
+    function __construct($Adress)
+    {
+      $this->Adress=$Adress;
+    }
+    function info()
+    {
+     echo "Location : {$this->Adress}";
+    }
+}
+$SBI1 =new SBI('ashram road');
+$SBI2 =new Bank('SBI','Goverment');
+echo $SBI1->info();
+echo "<br>";
+echo $SBI2->info();
+?>
+<h1 class="mt-4">42. CLASS AND OBJECT WITH CONSTANTS</h1>
+<?php
+class gods_Of_Thunder{
+      const riya ="drugs do muje drdugs do muje";
+      public $rajesh="lavo oye koi charas";
+}
+echo gods_Of_Thunder:: riya;
+echo "<br>";
+$dep1=new gods_Of_Thunder();
+echo $dep1->rajesh;
+?>
+<h1 class="mt-4">43. CLASS AND OBJECT WITH ABSTRACT CLASS</h1>
+<?php
+abstract class Jay_Mahakal{
+  abstract  function KedarNath();
+  abstract  function UjjainMahakal();
+  abstract  function Kelash();
+}
+class Bless extends Jay_Mahakal{
+  function KedarNath()
+  {
+    echo "Jay Mahakal Kedarnath vale";
+  }
+  function UjjainMahakal()
+  {
+    echo "Jay Mahakal Ujjain vale ";
+  } 
+  function Kelash()
+  {
+    echo "Jay Mahakal kelash vale";
+  }
+}
+$Blessings_Ghee_Baka=new Bless();
+$Blessings_Ghee_Baka->KedarNath();
+echo "<br>";
+$Blessings_Ghee_Baka->Kelash();
+echo "<br>";
+$Blessings_Ghee_Baka->UjjainMahakal();
+?>
+<h1 class="mt-4">44. CLASS AND OBJECT WITH INTERFACE</h1>
+<?php
+interface Narendra_Modi_Global_leader{
+  function Papu_RahulGandhi();
+  function Chamiya_SoniaGandhi();
+  function Priyanka_Gandhi_congress_Destroyer();
+  
+}
+class BJP implements Narendra_Modi_Global_leader{
+   function Papu_RahulGandhi(){
+    echo "Pappu : Esi Machine Lgaunga iss side se Alu Dllo Uss side se sona NIklega";
+   }
+   function Chamiya_SoniaGandhi(){
+    echo "Chamiya : Me Apko mera beta sop rahu ho jo karna he kar lijiye";
+   }
+   function  Priyanka_Gandhi_congress_Destroyer(){
+    echo "Priyanka : 60 sal purani congress ki dhajya udane ka ghamand he muje ";
+   } 
+} 
+$bj1=new BJP();
+$bj1->Chamiya_SoniaGandhi();
+echo "<br>";
+$bj1->Papu_RahulGandhi();
+echo "<br>";
+$bj1->Priyanka_Gandhi_congress_Destroyer();
+?>
+<h1 class="mt-4">45. CLASS AND OBJECT WITH TRAITS</h1>
+<?php
+trait hello{
+  function Michel_Jackson(){
+    echo "i am dancer";
+  }
+}
+class cow{
+  use hello;
+}
+class billa{
+  use hello;
+}
+$test =new billa();
+$test->Michel_Jackson();
+?>
+<h1 class="mt-4">46. CLASS AND OBJECT WITH STATIC METHOD</h1>
+<?php
+class jackson{
+  static function welcome(){
+    echo "hii i am dancer";
+  }
+}
+jackson::welcome();
+?>
 </html>
 
