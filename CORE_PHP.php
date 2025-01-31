@@ -921,7 +921,7 @@ try {
   echo "Process complete.";
 }
 ?>
-<!----------------------------------------------------------------DAY_7_CORE_PHP------------------------------------------------------->
+<!----------------------------------------------------------------DAY_8_CORE_PHP------------------------------------------------------->
 <h2 class="mt-3">DAY_8_CORE_PHP</h2>
 <h2 class="reg mt-5">PHP OOP</h2>
 <h1 class="mt-4">36. WHAT IS OOP </h1>
@@ -1035,7 +1035,7 @@ echo $acces->iam;
 // echo $acces->dance;
 // echo $acces->jsu;
 ?>
-<!----------------------------------------------------------------DAY_7_CORE_PHP------------------------------------------------------->
+<!----------------------------------------------------------------DAY_9_CORE_PHP------------------------------------------------------->
 <h2 class="mt-3">DAY_9_CORE_PHP</h2>
 <h1 class="mt-4">41. CLASS AND OBJECT WITH INHERITANCE</h1>
 <?php
@@ -1158,5 +1158,52 @@ class jackson{
 }
 jackson::welcome();
 ?>
+<!----------------------------------------------------------------DAY_10_CORE_PHP------------------------------------------------------->
+<h2 class="mt-3">DAY_10_CORE_PHP</h2>
+<h1 class="mt-4">47. CLASS AND OBJECT WITH STATIC PROPTIES </h1>
+<?php
+class pi {
+  public static $value = 3.14159;
+}
+
+// Get static property
+echo pi::$value;
+?>
+<h1 class="mt-4">48. CLASS AND OBJECT WITH NAMESPACE </h1>
+<p>
+PHP Namespaces
+Namespaces are qualifiers that solve two different problems:
+
+They allow for better organization by grouping classes that work together to perform a task
+They allow the same name to be used for more than one class
+For example, you may have a set of classes which describe an HTML table, such as Table, Row and Cell while also having another set of classes to describe furniture, such as Table, Chair and Bed. Namespaces can be used to organize the classes into two different groups while also preventing the two classes Table and Table from being mixed up.
+</p>
+
+<h2 class="reg mt-5">PHP MYSQL</h2>
+<h1 class="mt-4">49. CREATING DATABASE </h1>
+<p>
+What is MySQL?
+MySQL is a database system used on the web
+MySQL is a database system that runs on a server
+MySQL is ideal for both small and large applications
+MySQL is very fast, reliable, and easy to use
+MySQL uses standard SQL
+MySQL compiles on a number of platforms
+MySQL is free to download and use
+MySQL is developed, distributed, and supported by Oracle Corporation
+MySQL is named after co-founder Monty Widenius's daughter: My
+The data in a MySQL database are stored in tables. A table is a collection of related data, and it consists of columns and rows.
+
+Databases are useful for storing information categorically. A company may have a database with the following tables:
+
+Employees
+Products
+Customers
+Orders
+</p>
+<h1 class="mt-4">50. PHP DATBASE CONNECTION </h1>
+<img src="Screenshot 2025-01-31 125829.png" class="mt-3">
+<h1 class="mt-4">51. PHP DATBASE INSERT DATA </h1>
+<img src="../Core_PHP/CrudWithPhp/Screenshot 2025-01-31 165944.png" class="mt-3">
 </html>
 
