@@ -1,19 +1,20 @@
 <?php
+////////////////////////////////////////////////////////////////////// MYSQL CONNECTION WITH DATABASE  //////////////////////////////////////////////////
 $servername = "localhost";
 $username = "root";
 $password = "";
-$database = "regsitration";
-
+$database = "regsitration"; 
 
 $conn = mysqli_connect($servername, $username, $password, $database);
-
 
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
+///////////////////////////////////////////////////////////// VALIDATION AND DATA PROCESSING //////////////////////////////////////
 $nameErr = $emailErr = $passErr = $repeatErr = "";
 $name = $email = $password = $repeat = "";
+$edit_id = $edit_name = $edit_email = $edit_password = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $isValid = true;
@@ -62,114 +63,145 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
+    //////////////////////////////////////////////// INSERT OR UPDATE DATA IN DATABASE ////////////////////////////////////////////////
     if ($isValid) {
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+  
+        if (!empty($_POST["edit_id"])) {
+            $edit_id = intval($_POST["edit_id"]);
+            $updateQuery = "UPDATE users SET name='$name', email='$email', password='$password' WHERE id=$edit_id";
 
-        $sql = "INSERT INTO users (name, email, password) VALUES ('$name', '$email', '$hashed_password')";
-
-        if (mysqli_query($conn, $sql)) {
-            echo "<h2 class='text-success text-center'>Registration Successful!</h2>";
+            if (mysqli_query($conn, $updateQuery)) {
+                echo "<h2 class='text-success text-center'>User Updated Successfully!</h2>";
+            } else {
+                echo "<h2 class='text-danger text-center'>Error updating user: " . mysqli_error($conn) . "</h2>";
+            }
         } else {
-            echo "<h2 class='text-danger text-center'>Error: " . mysqli_error($conn) . "</h2>";
+            $sql = "INSERT INTO users (name, email, password) VALUES ('$name', '$email', '$password')";
+            if (mysqli_query($conn, $sql)) {
+                echo "<h2 class='text-success text-center'>Registration Successful!</h2>";
+            } else {
+                echo "<h2 class='text-danger text-center'>Error: " . mysqli_error($conn) . "</h2>";
+            }
         }
     }
 }
-
-
-$sql = "SELECT id, name, email FROM users";
+////////////////////////////////////////////////////////////////GET USER FROM DATBASE //////////////////////////////////////////////
+$sql = "SELECT id, name, email, password FROM users";
 $result = $conn->query($sql);
 
+//////////////////////////////////////////////////////// DELETE USER WITH DATBASE  //////////////////////////////////////////////////////
+if (isset($_GET['delete'])) {
+    $id = intval($_GET['delete']);
+    $deleteQuery = "DELETE FROM users WHERE id = $id";
+    if (mysqli_query($conn, $deleteQuery)) {
+        echo "<h2 class='text-success text-center'>User Deleted Successfully!</h2>";
+    } else {
+        echo "<h2 class='text-danger text-center'>Error deleting user: " . mysqli_error($conn) . "</h2>";
+    }
+    header("Location: " . $_SERVER["PHP_SELF"]);
+    exit();
+}
+
+//////////////////////////////////////////////////////// EDIT USER WITH DATBASE  //////////////////////////////////////////////////////
+if (isset($_GET['edit'])) {
+    $edit_id = intval($_GET['edit']);
+    $editQuery = "SELECT * FROM users WHERE id = $edit_id";
+    $editResult = mysqli_query($conn, $editQuery);
+
+    if ($editResult && mysqli_num_rows($editResult) > 0) {
+        $editRow = mysqli_fetch_assoc($editResult);
+        $edit_name = $editRow['name'];
+        $edit_email = $editRow['email'];
+        $edit_password = $editRow['password'];
+    }
+}
 function test_input($data) {
     return htmlspecialchars(stripslashes(trim($data)));
 }
 ?>
-
-<!doctype html>
+<!----------------------------------------------------REGISTED USER FORM  ------------------------------------------------------------>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>User Registration</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>User Registration</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-  <section class="mt-3">
+<section class="mt-3">
     <div class="container">
-      <div class="row d-flex justify-content-center">
-        <div class="col-lg-12 col-xl-11">
-          <div class="card text-black" style="border-radius: 25px;">
-            <div class="card-body p-md-5">
-              <div class="row justify-content-center">
-              <div class="col-md-10 col-lg-6 col-xl-5 order-1 order-lg-1">
-                  <p class="text-center h1 fw-bold mb-5">Sign up</p>
-                  <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                    <div class="mb-4">
-                      <label class="form-label">Your Name</label>
-                      <input type="text" name="name" class="form-control" />
-                      <span class="error text-danger"><?php echo $nameErr; ?></span>
-                    </div>
-                    <div class="mb-4">
-                      <label class="form-label">Your Email</label>
-                      <input type="email" name="email" class="form-control" />
-                      <span class="error text-danger"><?php echo $emailErr; ?></span>
-                    </div>
-                    <div class="mb-4">
-                      <label class="form-label">Password</label>
-                      <input type="password" name="password" class="form-control" />
-                      <span class="error text-danger"><?php echo $passErr; ?></span>
-                    </div>
-                    <div class="mb-4">
-                      <label class="form-label">Repeat Password</label>
-                      <input type="password" name="repeat" class="form-control" />
-                      <span class="error text-danger"><?php echo $repeatErr; ?></span>
-                    </div>
-                    <div class="d-flex justify-content-center">
-                      <button type="submit" class="btn btn-success btn-lg">Register</button>
-                    </div>
-                  </form>
-                </div>
-                <div class="col-md-10 col-lg-6 col-xl-7 d-flex order-2 align-items-center">
-                  <img src="../CrudWithPhp/deep.jpg" class="img-fluid h-100 object-fit-contain rounded" alt="Sample image">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+        <div class="row d-flex justify-content-center">
+            <div class="col-lg-12 col-xl-11">
+                <div class="card text-black" style="border-radius: 25px;">
+                    <div class="card-body p-md-5">
+                        <div class="row justify-content-center">
+                            <div class="col-md-10 col-lg-6 col-xl-5">
+                                <p class="text-center h1 fw-bold mb-5">
+                                 
 
-  <section class="mt-5">
-    <div class="container">
-      <h2 class="text-center">Registered Users</h2>
-      <div class="table-responsive">
-        <table class="table table-bordered table-hover table-striped">
-          <thead class="table-dark">
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Email</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    echo "<tr>
-                            <td>{$row['id']}</td>
-                            <td>{$row['name']}</td>
-                            <td>{$row['email']}</td>
-                          </tr>";
-                }
-            } else {
-                echo "<tr><td colspan='3' class='text-center'>No users found</td></tr>";
-            }
-            ?>
-          </tbody>
-        </table>
-      </div>
+                                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                                    <input type="hidden" name="edit_id" value="<?php echo $edit_id; ?>">
+
+                                    <div class="mb-4">
+                                        <label class="form-label">Your Name</label>
+                                        <input type="text" name="name" class="form-control" value="<?php echo $edit_name; ?>" />
+                                        <span class="error text-danger"><?php echo $nameErr; ?></span>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label">Your Email</label>
+                                        <input type="email" name="email" class="form-control" value="<?php echo $edit_email; ?>" />
+                                        <span class="error text-danger"><?php echo $emailErr; ?></span>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label">Password</label>
+                                        <input type="password" name="password" class="form-control" value="<?php echo $edit_password; ?>" />
+                                        <span class="error text-danger"><?php echo $passErr; ?></span>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label">Confirm Password</label>
+                                        <input type="password" name="repeat" class="form-control" value="<?php echo $edit_password; ?>" />
+                                        <span class="error text-danger"><?php echo $repeatErr; ?></span>
+                                    </div>
+
+                                    <div class="d-flex justify-content-center">
+                                        <button type="submit" class="btn btn-<?php echo ($edit_id) ? "warning" : "success"; ?> btn-lg">
+                                            <?php echo ($edit_id) ? "Update" : "Register"; ?>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </section>
+</section>
+<!----------------------------------------------------REGISTED USERS RECCORDS TABLE FROM DATABASE------------------------------------------------------------>
+<section class="mt-5">
+    <div class="container">
+        <h2 class="text-center">Registered Users</h2>
+        <table class="table table-bordered">
+            <tr><th>ID</th><th>Name</th><th>Email</th><th>paswword</th><th>Action</th></tr>
+            <?php while ($row = mysqli_fetch_assoc($result)) : ?>
+                <tr>
+                    <td><?= $row['id']; ?></td>
+                    <td><?= $row['name']; ?></td>
+                    <td><?= $row['email']; ?></td>
+                    <td><?= $row['password']; ?></td>
+                    <td>
+                        <a href="?edit=<?= $row['id']; ?>" class="btn btn-warning">Edit</a>
+                        <a href="?delete=<?= $row['id']; ?>" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+                    </td>
+                </tr>
+            <?php endwhile; ?>
+        </table>
+    </div>
+</section>
 </body>
 </html>
 

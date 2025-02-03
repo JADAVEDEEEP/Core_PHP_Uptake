@@ -1,10 +1,9 @@
 <?php
-$servername = "localhost";
-$username="root";
-$password ="";
-
-$conn = mysqli_connect($servername,$username,$password);
-
-echo "connection agaya me"
-
+$deep =20;
+function dazy(){
+    global $deep;
+    echo $deep;
+}
+dazy();
+echo $deep;
 ?>

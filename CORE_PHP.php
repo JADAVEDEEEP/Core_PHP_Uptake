@@ -1205,5 +1205,56 @@ Orders
 <img src="Screenshot 2025-01-31 125829.png" class="mt-3">
 <h1 class="mt-4">51. PHP DATBASE INSERT DATA </h1>
 <img src="../Core_PHP/CrudWithPhp/Screenshot 2025-01-31 165944.png" class="mt-3">
+<!----------------------------------------------------------------DAY_11_CORE_PHP------------------------------------------------------->
+<h2 class="mt-3">DAY_11_CORE_PHP</h2>
+<h1 class="mt-4">52. PHP DATBASE CRUD WITH UI </h1>
+<h5 class="mt-4">MY SQL VALIDATION</h5>
+<img src="../Core_PHP/CrudWithPhp/validation.png" class="mt-3">
+<h5 class="mt-4">MY SQL INSERT DATA</h5>
+<img src="../Core_PHP/CrudWithPhp/Add.png" class="mt-3">
+<h5 class="mt-4">MY SQL UPDATE DATA</h5>
+<img src="../Core_PHP/CrudWithPhp/Update1.png" class="mt-3">
+<img src="../Core_PHP/CrudWithPhp/Update.png" class="mt-3">
+<h5 class="mt-4">MY SQL DELETE DATA </h5>
+<img src="../Core_PHP/CrudWithPhp/DELETE.png" class="mt-3">
+<img src="../Core_PHP/CrudWithPhp/delete2.png" class="mt-3">
+<h1 class="mt-4">53. PHP DATBASE PREPARED PARAMETERS </h1>
+<p>
+A prepared statement is a feature used to execute the same (or similar) SQL statements repeatedly with high efficiency.
+
+Prepared statements basically work like this:
+
+Prepare: An SQL statement template is created and sent to the database. Certain values are left unspecified, called parameters (labeled "?"). Example: INSERT INTO MyGuests VALUES(?, ?, ?)
+The database parses, compiles, and performs query optimization on the SQL statement template, and stores the result without executing it
+Execute: At a later time, the application binds the values to the parameters, and the database executes the statement. The application may execute the statement as many times as it wants with different values
+Compared to executing SQL statements directly, prepared statements have three main advantages:
+
+Prepared statements reduce parsing time as the preparation on the query is done only once (although the statement is executed multiple times)
+Bound parameters minimize bandwidth to the server as you need send only the parameters each time, and not the whole query
+Prepared statements are very useful against SQL injections, because parameter values, which are transmitted later using a different protocol, need not be correctly escaped. If the original statement template is not derived from external input, SQL injection cannot occur.
+</p>
+<h1 class="mt-4">54. PHP MY SQL LIMIT DATA </h1>
+<p>Limit Data Selections From a MySQL Database
+MySQL provides a LIMIT clause that is used to specify the number of records to return.
+
+The LIMIT clause makes it easy to code multi page results or pagination with SQL, and is very useful on large tables. Returning a large number of records can impact on performance.
+
+Assume we wish to select all records from 1 - 30 (inclusive) from a table called "Orders". The SQL query would then look like this:
+
+$sql = "SELECT * FROM Orders LIMIT 30";
+When the SQL query above is run, it will return the first 30 records.
+
+What if we want to select records 16 - 25 (inclusive)?
+
+Mysql also provides a way to handle this: by using OFFSET.
+
+The SQL query below says "return only 10 records, start on record 16 (OFFSET 15)":
+
+$sql = "SELECT * FROM Orders LIMIT 10 OFFSET 15";
+You could also use a shorter syntax to achieve the same result:
+
+$sql = "SELECT * FROM Orders LIMIT 15, 10";
+Notice that the numbers are reversed when you use a comma.</p>
+
 </html>
 
