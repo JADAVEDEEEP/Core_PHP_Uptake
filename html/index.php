@@ -69,7 +69,8 @@ include '../php/index.php';
                             </ul>
                             <div class="text-center mt-3">
                                 <button class="btn btn-primary d-flex justify-content-start mt-3" onclick="showEditForm()">Edit Profile</button>
-                                <button class="btn btn-warning d-flex justify-content-center mt-3">Change Password</button>
+                                <a href="change_password.php" class="btn btn-warning d-flex justify-content-center mt-3">Change Password</a>
+
                             </div>
                         </div>
 
@@ -104,4 +105,4 @@ include '../php/index.php';
     
 
 </body>
-</html>
+</html>+

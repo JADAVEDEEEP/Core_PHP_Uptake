@@ -1,55 +1,98 @@
-
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST");
-header("Access-Control-Allow-Headers: Content-Type");
+include '../includes/Connection.php';
 
+//file directory read write abd create 
 $uploadDir = "assets/";
-$response = [];
+if (!is_dir($uploadDir)) {
+    mkdir($uploadDir, 0777, true);
+}
+//generates the uniqe file name everytime 
+function uploadFile($file, $uploadDir) {
+    if ($file["error"] === UPLOAD_ERR_OK) {
+        $fileType = strtolower(pathinfo($file["name"], PATHINFO_EXTENSION));
+        $uniqueName = uniqid() . "." . $fileType;
+        $filePath = $uploadDir . $uniqueName;
+        if (move_uploaded_file($file["tmp_name"], $filePath)) {
+            return $filePath;
+        }
+    }
+    return "";
+}
+// function uploadFile($file, $uploadDir) {
+//     if ($file["error"] === UPLOAD_ERR_OK) {
+//         $fileType = strtolower(pathinfo($file["name"], PATHINFO_EXTENSION));
+//         $uniqueName = uniqid() . "." . $fileType;
+//         $filePath = $uploadDir . $uniqueName;
 
+//         if (move_uploaded_file($file["tmp_name"], $filePath)) {
+//             // Generate the full URL
+//             $baseUrl = "http://yourdomain.com/uploads/"; // Replace with your actual domain & upload folder
+//             return $baseUrl . $uniqueName;
+//         }
+//     }
+//     return "";
+// }
+
+
+//checth the if th reust method is posot 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $vichalename = $_POST["name"] ?? "";
-    $vichaletype = $_POST["v_type"] ?? "";
-    $ownername = $_POST["owner"] ?? "";
-    $vichlenumber = $_POST["v_Number"] ?? "";
-    $v_Number = $_POST["v_Number"];
-    
-    $imagePath = "";
-    $rcBookPath = "";
+    $id = isset($_POST["id"]) ? trim($_POST["id"]) : "";
+    $name = trim($_POST["name"]);
+    $type = trim($_POST["v_type"]);
+    $owner = trim($_POST["owner"]);
+    $vehicle_number = trim($_POST["v_Number"]);
 
- if (empty($vichalename) || empty($vichaletype) || empty($ownername) || empty($vichlenumber)) {
-        echo json_encode(["success" => false, "message" => "All fields are required!"]);
-        exit;
-    }
-
-    if (!empty($_FILES["rc_book"]["name"])) {
-        $rcBookPath = $uploadDir . basename($_FILES["rc_book"]["name"]);
-        move_uploaded_file($_FILES["rc_book"]["tmp_name"], $rcBookPath);
-    }
-
-    $conn = new mysqli("localhost", "root", "", "your_database");
-
-    if ($conn->connect_error) {
-        $response["success"] = false;
-        $response["message"] = "Database connection failed!";
-        echo json_encode($response);
+    //validation 
+   
+    if (empty($name) || empty($type) || empty($owner) || empty($vehicle_number)) {
+        echo "<script>alert('All fields are required!'); window.history.back();</script>";
         exit();
     }
 
-    $stmt = $conn->prepare("INSERT INTO vehicles (name, v_type, owner, v_Number, vichalephto, rc_book) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssssss", $name, $v_type, $owner, $v_Number, $imagePath, $rcBookPath);
+    // Handling file File uploads
+    $rcBookPath = !empty($_FILES["rc_book"]["name"]) ? uploadFile($_FILES["rc_book"], $uploadDir) : "";
+    $imagePath = !empty($_FILES["image"]["name"]) ? uploadFile($_FILES["image"], $uploadDir) : "";
 
-    if ($stmt->execute()) {
-        $response["success"] = true;
-        $response["message"] = "Vehicle added successfully!";
+    if (!empty($id)) {
+      //updae vichale data
+        $stmt = $conn->prepare("UPDATE vehicles SET vichalename=?, vichaletype=?, ownername=?, vichlenumber=?, vichalephto=IFNULL(?, vichalephto), rcBookfile=IFNULL(?, rcBookfile) WHERE id=?");
+        $stmt->bind_param("ssssssi", $name, $type, $owner, $vehicle_number, $imagePath, $rcBookPath, $id);
     } else {
-        $response["success"] = false;
-        $response["message"] = "Failed to add vehicle!";
+     //insert vicahle data 
+        $stmt = $conn->prepare("INSERT INTO vehicles (vichalename, vichaletype, ownername, vichlenumber, vichalephto, rcBookfile) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssss", $name, $type, $owner, $vehicle_number, $imagePath, $rcBookPath);
     }
 
-    $stmt->close();
-    $conn->close();
-
-    echo json_encode($response);
+    if ($stmt->execute()) {
+        header("Location: VichaleCrud.php");
+        exit();
+    }
 }
+
+/////////////////////////////////////////////////////////DELETE OPERATION API//////////////////////////////////////////////////////
+
+if (isset($_GET["delete"])) {
+    $id = $_GET["delete"];
+
+    $stmt = $conn->prepare("SELECT vichalephto, rcBookfile FROM vehicles WHERE id=?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result()->fetch_assoc();
+
+    if ($result) {
+        if (!empty($result['vichalephto']) && file_exists($result['vichalephto'])) unlink($result['vichalephto']);
+        if (!empty($result['rcBookfile']) && file_exists($result['rcBookfile'])) unlink($result['rcBookfile']);
+    }
+
+    $stmt = $conn->prepare("DELETE FROM vehicles WHERE id=?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+
+    header("Location: VichaleCrud.php");
+    exit();
+}
+
+///////////////////////////////////////////////////////////////////////fetch the vichales ///////////////////////////////////////////
+$result = $conn->query("SELECT * FROM vehicles");
+$vehicles = $result->fetch_all(MYSQLI_ASSOC);
 ?>
