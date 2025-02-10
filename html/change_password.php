@@ -14,7 +14,7 @@ include '../php/cangepassword.php';
     <link rel="stylesheet" href="../css/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <?php if ($redirect) : ?>
-        <meta http-equiv="refresh" content="3;url=login.php"> <!-- Redirect after 3 seconds -->
+        <meta http-equiv="refresh" content="3;url=login.php">
     <?php endif; ?>
 </head>
 <body>
@@ -30,7 +30,7 @@ include '../php/cangepassword.php';
                             <script>
                                 setTimeout(function () {
                                     window.location.href = 'login.php';
-                                }, 3000); // Redirect using JavaScript after 3 seconds
+                                }, 3000); 
                             </script>
                         <?php endif; ?>
                     <?php endif; ?>

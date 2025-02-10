@@ -10,7 +10,7 @@ if (!isset($_SESSION['user'])) {
 
 $user = $_SESSION['user']; 
 
-
+////////////////////////////////////////////////////CALL THAT ASSOCATVE ARRAYHERE FOR FETCH USER PROFILE VALUES ////////////////////////////
 
 $user = $_SESSION['user'];
 
@@ -21,6 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     include '../includes/Connection.php';
     $userId = $user['id'];
+//////////////////////////////////////////////////////////UPDATE USER PFOFILE //////////////////////////////////////////////////////////
 
     $sql = "UPDATE users SET name='$name', email='$email', phone='$phone' WHERE id='$userId'";
     if (mysqli_query($conn, $sql)) {

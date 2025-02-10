@@ -1,23 +1,25 @@
 <?php
 include '../includes/Connection.php';
 
-$message = "";
-$toastClass = "";
+//Store all the variabls here who will be in get use 
+
 $nameErr = $emailErr = $phoneErr = $passwordErr = "";
 $isValid = true;
+$message = "";
+$toastClass = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-   
+
     function test_input($data) {
         return htmlspecialchars(stripslashes(trim($data)));
     }
+//////////////////////////////////////////////AL KIND OF DIFFRENT VALIDATION WITH DIFFRENT REGYLAEEXPRESSION///////////////////////////////////
 
     $name = test_input($_POST['name']);
     $email = test_input($_POST['email']);
     $password = test_input($_POST['password']);
     $phone = test_input($_POST['phone']);
 
-   
     if (empty($name)) {
         $nameErr = "Name is required";
         $isValid = false;
@@ -26,7 +28,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $isValid = false;
     }
 
-  
     if (empty($phone)) {
         $phoneErr = "Phone number is required";
         $isValid = false;
@@ -35,7 +36,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $isValid = false;
     }
 
-    
     if (empty($password)) {
         $passwordErr = "Password is required";
         $isValid = false;
@@ -47,39 +47,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $isValid = false;
     }
 
-    // Email validation
     if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $emailErr = "Invalid email format";
         $isValid = false;
     }
 
     if ($isValid) {
-       
         $email = mysqli_real_escape_string($conn, $email);
         $checkEmailQuery = "SELECT email FROM users WHERE email = '$email'";
         $checkEmailResult = mysqli_query($conn, $checkEmailQuery);
 
+        ///////////////////////////////////////////VALUIDATION FOR DUPLICATE EMAIL//////////////////////////
+
         if (!$checkEmailResult) {
             $message = "Error checking email: " . mysqli_error($conn);
-            $toastClass = "#dc3545";
+            $toastClass = "error";
         } elseif (mysqli_num_rows($checkEmailResult) > 0) {
             $message = "Email ID already exists";
-            $toastClass = "#007bff";
+            $toastClass = "info";
         } else {
-            
             $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
             $insertQuery = "INSERT INTO users (name, email, phone, password) VALUES (?, ?, ?, ?)";
-            
             $stmt = mysqli_prepare($conn, $insertQuery);
             mysqli_stmt_bind_param($stmt, "ssss", $name, $email, $phone, $hashedPassword);
-            
+            ///////////////////////////////////////////////////////////////SUCCES MESSAGE WITH THE SWEETALERT//////////////////////////////////////////
             if (mysqli_stmt_execute($stmt)) {
-                $message = "Account created successfully";
-                $toastClass = "#28a745";
-                header("Location: login.php"); 
+                echo "<script>
+                        setTimeout(() => {
+                            Swal.fire({
+                                title: 'Success!',
+                                text: 'Account created successfully',
+                                icon: 'success',
+                                timer: 3000,
+                                showConfirmButton: false
+                            }).then(() => {
+                                window.location.href = 'login.php';
+                            });
+                        }, 500);
+                    </script>";
             } else {
                 $message = "Error: " . mysqli_error($conn);
-                $toastClass = "#dc3545";
+                $toastClass = "error";
             }
 
             mysqli_stmt_close($stmt);

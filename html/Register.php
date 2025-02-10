@@ -9,6 +9,8 @@ include '../php/Register.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -65,6 +67,7 @@ include '../php/Register.php';
         <i class="fa fa-user-circle-o icon-header"></i>
         <h5 class="mt-2 mb-3 fw-bold">Create Account</h5>
 
+    
         <?php if ($message): ?>
             <div class="alert alert-<?php echo $toastClass; ?> text-center">
                 <?php echo $message; ?>
