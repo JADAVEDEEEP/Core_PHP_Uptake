@@ -1,5 +1,5 @@
 <?php
-// Include database connection
+// Include database my$mysqliection
 include '../includes/Connection.php';
 session_start();
 
@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Fetch the current password from the database using email
     $query = "SELECT password FROM users WHERE email = ?";
-    $stmt = $conn->prepare($query);
+    $stmt = $mysqli->prepare($query);
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $stmt->bind_result($db_password);
@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Update password in the database
         $update_query = "UPDATE users SET password = ? WHERE email = ?";
-        $stmt = $conn->prepare($update_query);
+        $stmt = $mysqli->prepare($update_query);
         $stmt->bind_param("ss", $hashed_password, $email);
 
         if ($stmt->execute()) {

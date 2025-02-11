@@ -31,8 +31,24 @@ function uploadFile($file, $uploadDir) {
 //         }
 //     }
 //     return "";
-// }
+//  }
 
+
+
+// function uploadFile($file, $uploadDir) {
+//     if ($file["error"] !== UPLOAD_ERR_OK) {
+//       return "";
+//     }
+//     $fileType = strtolower(pathinfo($file["name"], PATHINFO_EXTENSION));
+//     $uniqueName = uniqid() . "." . $fileType;
+//     $filePath = $uploadDir . $uniqueName;
+//     if (!move_uploaded_file($file["tmp_name"], $filePath)) {
+//       return "";
+//     }
+  
+//     $baseUrl = "http://yourdomain.com/uploads/"; // Replace with your actual domain & upload folder
+//     return $baseUrl . $uniqueName;
+//   }
 
 //checth the if th reust method is posot 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -55,11 +71,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if (!empty($id)) {
       //updae vichale data
-        $stmt = $conn->prepare("UPDATE vehicles SET vichalename=?, vichaletype=?, ownername=?, vichlenumber=?, vichalephto=IFNULL(?, vichalephto), rcBookfile=IFNULL(?, rcBookfile) WHERE id=?");
+        $stmt = $mysqli->prepare("UPDATE vehicles SET vichalename=?, vichaletype=?, ownername=?, vichlenumber=?, vichalephto=IFNULL(?, vichalephto), rcBookfile=IFNULL(?, rcBookfile) WHERE id=?");
         $stmt->bind_param("ssssssi", $name, $type, $owner, $vehicle_number, $imagePath, $rcBookPath, $id);
     } else {
      //insert vicahle data 
-        $stmt = $conn->prepare("INSERT INTO vehicles (vichalename, vichaletype, ownername, vichlenumber, vichalephto, rcBookfile) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt = $mysqli->prepare("INSERT INTO vehicles (vichalename, vichaletype, ownername, vichlenumber, vichalephto, rcBookfile) VALUES (?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("ssssss", $name, $type, $owner, $vehicle_number, $imagePath, $rcBookPath);
     }
 
@@ -74,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 if (isset($_GET["delete"])) {
     $id = $_GET["delete"];
 
-    $stmt = $conn->prepare("SELECT vichalephto, rcBookfile FROM vehicles WHERE id=?");
+    $stmt = $mysqli->prepare("SELECT vichalephto, rcBookfile FROM vehicles WHERE id=?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $result = $stmt->get_result()->fetch_assoc();
@@ -84,7 +100,7 @@ if (isset($_GET["delete"])) {
         if (!empty($result['rcBookfile']) && file_exists($result['rcBookfile'])) unlink($result['rcBookfile']);
     }
 
-    $stmt = $conn->prepare("DELETE FROM vehicles WHERE id=?");
+    $stmt = $mysqli->prepare("DELETE FROM vehicles WHERE id=?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
 
@@ -93,6 +109,6 @@ if (isset($_GET["delete"])) {
 }
 
 ///////////////////////////////////////////////////////////////////////fetch the vichales ///////////////////////////////////////////
-$result = $conn->query("SELECT * FROM vehicles");
+$result = $mysqli->query("SELECT * FROM vehicles");
 $vehicles = $result->fetch_all(MYSQLI_ASSOC);
 ?>

@@ -24,14 +24,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 //////////////////////////////////////////////////////////UPDATE USER PFOFILE //////////////////////////////////////////////////////////
 
     $sql = "UPDATE users SET name='$name', email='$email', phone='$phone' WHERE id='$userId'";
-    if (mysqli_query($conn, $sql)) {
+    if (mysqli_query($mysqli, $sql)) {
         $_SESSION['user']['name'] = $name;
         $_SESSION['user']['email'] = $email;
         $_SESSION['user']['phone'] = $phone;
         header("Location: index.php");
         exit();
     } else {
-        echo "Error updating record: " . mysqli_error($conn);
+        echo "Error updating record: " . mysqli_error($mysqli);
     }
 }
 ?>

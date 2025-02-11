@@ -53,14 +53,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if ($isValid) {
-        $email = mysqli_real_escape_string($conn, $email);
+        $email = mysqli_real_escape_string($mysqli, $email);
         $checkEmailQuery = "SELECT email FROM users WHERE email = '$email'";
-        $checkEmailResult = mysqli_query($conn, $checkEmailQuery);
+        $checkEmailResult = mysqli_query($mysqli, $checkEmailQuery);
 
         ///////////////////////////////////////////VALUIDATION FOR DUPLICATE EMAIL//////////////////////////
 
         if (!$checkEmailResult) {
-            $message = "Error checking email: " . mysqli_error($conn);
+            $message = "Error checking email: " . mysqli_error($mysqli);
             $toastClass = "error";
         } elseif (mysqli_num_rows($checkEmailResult) > 0) {
             $message = "Email ID already exists";
@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
             $insertQuery = "INSERT INTO users (name, email, phone, password) VALUES (?, ?, ?, ?)";
-            $stmt = mysqli_prepare($conn, $insertQuery);
+            $stmt = mysqli_prepare($mysqli, $insertQuery);
             mysqli_stmt_bind_param($stmt, "ssss", $name, $email, $phone, $hashedPassword);
             ///////////////////////////////////////////////////////////////SUCCES MESSAGE WITH THE SWEETALERT//////////////////////////////////////////
             if (mysqli_stmt_execute($stmt)) {
@@ -86,7 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         }, 500);
                     </script>";
             } else {
-                $message = "Error: " . mysqli_error($conn);
+                $message = "Error: " . mysqli_error($mysqli);
                 $toastClass = "error";
             }
 
@@ -94,6 +94,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    mysqli_close($conn);
+    mysqli_close($mysqli);
 }
 ?>

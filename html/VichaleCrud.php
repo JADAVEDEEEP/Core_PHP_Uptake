@@ -61,9 +61,13 @@
                 <input class="form-control" id="name" name="name">
             </div>
             <div class="mb-2">
-                <label><i class="fa fa-truck"></i> Vehicle Type</label>
-                <input class="form-control" id="v_type" name="v_type">
+            <label for="cars"><i class="fa fa-truck"></i>Vichale Type</label> 
+                 <select id="v_type" name="v_type" class="form-control">
+                    <option label="car">Car</option>
+                    <option label="Bike">Bike</option>
+                </select>
             </div>
+            
             <div class="mb-2">
                 <label><i class="fa fa-user"></i> Owner Name</label>
                 <input class="form-control" id="owner" name="owner">

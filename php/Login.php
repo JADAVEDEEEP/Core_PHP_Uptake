@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     ///////////////////////////////////////////////PREAPERD STAMMENT USED FOR LOGIN TIWCE ////////////////////////////////////////////////
     
-    $stmt = $conn->prepare("SELECT id, name, email, phone, password FROM users WHERE email = ?");
+    $stmt = $mysqli->prepare("SELECT id, name, email, phone, password FROM users WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $stmt->store_result();
@@ -47,6 +47,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $stmt->close();
-    $conn->close();
+    $mysqli->close();
 }
 ?>
