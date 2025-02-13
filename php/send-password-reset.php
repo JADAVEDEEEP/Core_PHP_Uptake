@@ -1,48 +1,52 @@
 <?php
 
-include '../includes/Connection.php';
+require '../php/phpmailer/vendor/autoload.php';
 
 if (isset($_POST['email'])) {
-    $email = $_POST['email'];
+    $email = $_POST["email"];
 
-    $token = bin2hex(random_bytes(16));
-    $token_hash = hash("sha256", $token);
+    // Generate a random token
+    $token = bin2hex(random_bytes(16)); 
+
+    // token ecryption with hash
+    $token_hash = password_hash($token, PASSWORD_DEFAULT);
+
+    // expirydate 
     $expiry = date("Y-m-d H:i:s", time() + 60 * 30);
 
-  
-    $stmt = $mysqli->prepare("UPDATE users SET reset_token_hash = ?, reset_token_expires_at = ? WHERE email = ?");
+    // Database connection
+    $mysqli = require '../includes/Connection.php';
+
+    // Store the hashed token in the database
+    $sql = "UPDATE users
+            SET reset_token_hash = ?, 
+                reset_token_expires_at = ?
+            WHERE email = ?";
+
+    $stmt = $mysqli->prepare($sql);
     $stmt->bind_param("sss", $token_hash, $expiry, $email);
     $stmt->execute();
 
-    if ($stmt->affected_rows > 0) {
+    if ($stmt->affected_rows) {
         $mail = require __DIR__ . "/mailer.php";
-
-        if (!$mail) {
-            die("Mailer failed to initialize.");
-        }
 
         $mail->setFrom("noreply@example.com");
         $mail->addAddress($email);
         $mail->Subject = "Password Reset";
-        $mail->isHTML(true);
         $mail->Body = <<<END
-        <p>Click <a href="../php/reset_password.php?token=$token">here</a> to reset your password.</a>.</p>
-        
+        Click <a href="http://localhost/xampp/Core_PHP_Uptake-Day13_core_PHP/CrudNew/html/reset_password.php?token=$token&email=$email">here</a> 
+        to reset your password.
         END;
 
         try {
             $mail->send();
             echo "Message sent, please check your inbox.";
-            header("Location: reset_password.php"); 
         } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            echo "Message could not be sent. Mailer error: {$mail->ErrorInfo}";
         }
     } else {
-        echo "No account found with this email.";
+        echo "No user found with this email.";
     }
-
-    $stmt->close();
-    $mysqli->close();
 }
 
 ?>
