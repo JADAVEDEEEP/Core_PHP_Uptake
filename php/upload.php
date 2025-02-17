@@ -70,10 +70,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $imagePath = !empty($_FILES["image"]["name"]) ? uploadFile($_FILES["image"], $uploadDir) : "";
 
     if (!empty($id)) {
-      //updae vichale data
+    ////////////////////////////////////////////////////////////UPDATE OPERATION //////////////////////////
         $stmt = $mysqli->prepare("UPDATE vehicles SET vichalename=?, vichaletype=?, ownername=?, vichlenumber=?, vichalephto=IFNULL(?, vichalephto), rcBookfile=IFNULL(?, rcBookfile) WHERE id=?");
         $stmt->bind_param("ssssssi", $name, $type, $owner, $vehicle_number, $imagePath, $rcBookPath, $id);
     } else {
+        /////////////////////////////////////////////INSERT API /////////////////////////////////////////
      //insert vicahle data 
         $stmt = $mysqli->prepare("INSERT INTO vehicles (vichalename, vichaletype, ownername, vichlenumber, vichalephto, rcBookfile) VALUES (?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("ssssss", $name, $type, $owner, $vehicle_number, $imagePath, $rcBookPath);
@@ -108,7 +109,7 @@ if (isset($_GET["delete"])) {
     exit();
 }
 
-///////////////////////////////////////////////////////////////////////fetch the vichales ///////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////fetch the vichales API ///////////////////////////////////////////
 $result = $mysqli->query("SELECT * FROM vehicles");
 $vehicles = $result->fetch_all(MYSQLI_ASSOC);
 ?>

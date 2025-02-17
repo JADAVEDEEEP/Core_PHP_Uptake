@@ -65,7 +65,7 @@ include '../php/Register.php';
 <body>
     <div class="register-box text-center">
         <i class="fa fa-user-circle-o icon-header"></i>
-        <h5 class="mt-2 mb-3 fw-bold">Create Account</h5>
+        <h5 class="mt-2 mb-3 fw-bold ">Create Account</h5>
 
     
         <?php if ($message): ?>

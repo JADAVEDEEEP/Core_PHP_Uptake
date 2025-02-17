@@ -6,7 +6,7 @@ session_start();
 $message = "";
 $redirect = false; // Flag to trigger redirection
 
-// Handle form submission
+/////////////////////////////////////////////////CHANGE PASSWORD API/////////////////////////////
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email']; // User enters email
     $old_password = $_POST['old_password'];

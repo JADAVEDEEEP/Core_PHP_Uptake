@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->fetch();
 
         if (password_verify($password, $db_password)) { 
-         ///////////////////////////////////////////////////////CCREATE THE ASSOCATIVE AARAY OF USER TO FETCH THE VALUES /////////////////////////////////
+         ///////////////////////////////////////////////////////CCREATE THE ASSOCATIVE AARAY OF USER TO FETCH THE VALUES LOGIN API /////////////////////////////////
             $_SESSION['user'] = [
                 'id' => $id,
                 'name' => $name,
