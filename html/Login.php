@@ -9,13 +9,13 @@ include '../php/Login.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-    
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Add jQuery -->
     <link rel="stylesheet" href="../css/login.css">
     <title>Login Page</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
-        body {
+ body {
             background: linear-gradient(to right, #8e44ad, #3498db);
             font-family: 'Poppins', sans-serif;
             height: 100vh;
@@ -73,10 +73,12 @@ include '../php/Login.php';
             font-weight: 600;
         }
     </style>
+    </style>
 </head>
 
 <body>
     <div class="login-container shadow-lg">
+        <!-- Display Toast Messages -->
         <?php if (isset($_SESSION['message'])): ?>
             <div class="toast align-items-center text-white <?php echo $_SESSION['toastClass']; ?> border-0" role="alert"
                 aria-live="assertive" aria-atomic="true">
@@ -93,7 +95,8 @@ include '../php/Login.php';
             </div>
         <?php endif; ?>
 
-        <form action="Login.php" method="post">
+        <!-- Login Form -->
+        <form id="loginForm" action="javascript:void(0);">
             <div class="text-center">
                 <i class="fa fa-user-circle fa-4x mb-3 text-primary"></i>
                 <h5 class="mb-4">Login Into Your Account</h5>
@@ -108,21 +111,59 @@ include '../php/Login.php';
             </div>
             <button type="submit" class="btn btn-success mb-4 w-100">Login</button>
             <div class="d-flex justify-content:space-between">
-                <p><a href="./register.php" class="text-primary fw-bold mx-3">Create Account</a>  <a href="../html/forgot-password.php" class="text-primary fw-bold">Forgot Password</a></p>
+                <p><a href="./register.php" class="text-primary fw-bold mx-4">Create Account</a>  <a href="../html/forgot-password.php" class="text-primary fw-bold">Forgot Password</a></p>
             </div>
-            </div>
-            
-                <a href="#" class="fa fa-google"></a>
+        
         </form>
     </div>
     
+    </div>
 
+   
     <script>
-        var toastElList = [].slice.call(document.querySelectorAll('.toast'));
-        var toastList = toastElList.map(function (toastEl) {
-            return new bootstrap.Toast(toastEl, { delay: 3000 });
+        $(document).ready(function () {
+            $('#loginForm').on('submit', function (e) {
+                e.preventDefault(); 
+
+                const email = $('#email').val();
+                const password = $('#password').val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "Login.php", 
+                    data: {email: email, password: password},
+                    success: function (response) {
+                        const res = JSON.parse(response);
+
+                        if (res.status === "success") {
+                           
+                            Swal.fire({
+                                icon: 'success',
+                                title: res.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(() => {
+                                window.location.href = 'index.php'; 
+                            });
+                        } else {
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: res.message,
+                                showConfirmButton: true
+                            });
+                        }
+                    },
+                    error: function () {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'An error occurred. Please try again.',
+                            showConfirmButton: true
+                        });
+                    }
+                });
+            });
         });
-        toastList.forEach(toast => toast.show());
     </script>
 </body>
 </html>

@@ -1,25 +1,24 @@
 <?php
 include '../includes/Connection.php';
 
-//Store all the variabls here who will be in get use 
-
+// Error variables from front end 
 $nameErr = $emailErr = $phoneErr = $passwordErr = "";
 $isValid = true;
-$message = "";
-$toastClass = "";
+$response = array();
+
+// function to santize hthe input 
+function test_input($data) {
+    return htmlspecialchars(stripslashes(trim($data)));
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    function test_input($data) {
-        return htmlspecialchars(stripslashes(trim($data)));
-    }
-//////////////////////////////////////////////AL KIND OF DIFFRENT VALIDATION WITH DIFFRENT REGYLAEEXPRESSION///////////////////////////////////
-
+   //santize inputs 
     $name = test_input($_POST['name']);
     $email = test_input($_POST['email']);
     $password = test_input($_POST['password']);
     $phone = test_input($_POST['phone']);
 
+    // validtion for the name 
     if (empty($name)) {
         $nameErr = "Name is required";
         $isValid = false;
@@ -28,6 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $isValid = false;
     }
 
+    // Validate foor the phone 
     if (empty($phone)) {
         $phoneErr = "Phone number is required";
         $isValid = false;
@@ -36,6 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $isValid = false;
     }
 
+    // Validattion for the passworf 
     if (empty($password)) {
         $passwordErr = "Password is required";
         $isValid = false;
@@ -47,53 +48,59 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $isValid = false;
     }
 
+    // Validate for the email
     if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $emailErr = "Invalid email format";
         $isValid = false;
     }
 
-    if ($isValid) {
-        $email = mysqli_real_escape_string($mysqli, $email);
-        $checkEmailQuery = "SELECT email FROM users WHERE email = '$email'";
-        $checkEmailResult = mysqli_query($mysqli, $checkEmailQuery);
-
-        ///////////////////////////////////////////VALUIDATION FOR DUPLICATE EMAIL//////////////////////////
-
-        if (!$checkEmailResult) {
-            $message = "Error checking email: " . mysqli_error($mysqli);
-            $toastClass = "error";
-        } elseif (mysqli_num_rows($checkEmailResult) > 0) {
-            $message = "Email ID already exists";
-            $toastClass = "info";
-        } else {
-            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-            $insertQuery = "INSERT INTO users (name, email, phone, password) VALUES (?, ?, ?, ?)";
-            $stmt = mysqli_prepare($mysqli, $insertQuery);
-            mysqli_stmt_bind_param($stmt, "ssss", $name, $email, $phone, $hashedPassword);
-            ///////////////////////////////////////////////////////////////SUCCES MESSAGE WITH THE SWEETALERT//////////////////////////////////////////
-            if (mysqli_stmt_execute($stmt)) {
-                echo "<script>
-                        setTimeout(() => {
-                            Swal.fire({
-                                title: 'Success!',
-                                text: 'Account created successfully',
-                                icon: 'success',
-                                timer: 3000,
-                                showConfirmButton: false
-                            }).then(() => {
-                                window.location.href = 'login.php';
-                            });
-                        }, 500);
-                    </script>";
-            } else {
-                $message = "Error: " . mysqli_error($mysqli);
-                $toastClass = "error";
-            }
-
-            mysqli_stmt_close($stmt);
-        }
+    // If validation fails, return errors as JSON
+    if (!$isValid) {
+        $response['status'] = 'error';
+        $response['errors'] = array(
+            'nameErr'     => $nameErr,
+            'emailErr'    => $emailErr,
+            'phoneErr'    => $phoneErr,
+            'passwordErr' => $passwordErr
+        );
+        echo json_encode($response);
+        exit;
     }
 
+    // Escape email for the query and check for duplicate email
+    $emailEscaped = mysqli_real_escape_string($mysqli, $email);
+    $checkEmailQuery = "SELECT email FROM users WHERE email = '$emailEscaped'";
+    $checkEmailResult = mysqli_query($mysqli, $checkEmailQuery);
+
+    if (!$checkEmailResult) {
+        $response['status']  = 'error';
+        $response['message'] = "Error checking email: " . mysqli_error($mysqli);
+        echo json_encode($response);
+        exit;
+    } elseif (mysqli_num_rows($checkEmailResult) > 0) {
+        $response['status']  = 'info';
+        $response['message'] = "Email ID already exists";
+        echo json_encode($response);
+        exit;
+    } else {
+        // Insert new user record
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+        $insertQuery = "INSERT INTO users (name, email, phone, password) VALUES (?, ?, ?, ?)";
+        $stmt = mysqli_prepare($mysqli, $insertQuery);
+        mysqli_stmt_bind_param($stmt, "ssss", $name, $email, $phone, $hashedPassword);
+        
+        if (mysqli_stmt_execute($stmt)) {
+            $response['status']  = 'success';
+            $response['message'] = 'Account created successfully';
+        } else {
+            $response['status']  = 'error';
+            $response['message'] = "Error: " . mysqli_error($mysqli);
+        }
+        mysqli_stmt_close($stmt);
+    }
+    
     mysqli_close($mysqli);
+    echo json_encode($response);
+    exit;
 }
 ?>

@@ -2,13 +2,10 @@
 session_start();
 include('../includes/Connection.php');
 
-//////////////////////////////////////////////////////////////////SET REQUEST MEFHOD FOR OPERATON //////////////////////////////////////////////
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    ///////////////////////////////////////////////PREAPERD STAMMENT USED FOR LOGIN TIWCE ////////////////////////////////////////////////
-    
     $stmt = $mysqli->prepare("SELECT id, name, email, phone, password FROM users WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
@@ -18,31 +15,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_result($id, $name, $email, $phone, $db_password);
         $stmt->fetch();
 
-        if (password_verify($password, $db_password)) { 
-         ///////////////////////////////////////////////////////CCREATE THE ASSOCATIVE AARAY OF USER TO FETCH THE VALUES LOGIN API /////////////////////////////////
+        if (password_verify($password, $db_password)) {
             $_SESSION['user'] = [
                 'id' => $id,
                 'name' => $name,
                 'email' => $email,
                 'phone' => $phone,
-             
-               
             ];
-            ////////////////////////////////////////////////////////////CALL THAT MESSAGE AND TOASTCLASSS OVERHERE TO PRINT THE SUCCESS MESSAGE//////////////
+
             $_SESSION['message'] = "Login successful. Welcome, $name!";
             $_SESSION['toastClass'] = "bg-success";
-            header("Location: index.php");
+            
+          
+            echo json_encode([
+                'status' => 'success',
+                'message' => "Login successful. Welcome, $name!"
+            ]);
             exit();
         } else {
-            $_SESSION['message'] = "Incorrect password"; 
-            $_SESSION['toastClass'] = "bg-danger";
-            header("Location: login.php"); 
+           
+            echo json_encode([
+                'status' => 'error',
+                'message' => "Incorrect password"
+            ]);
             exit();
         }
     } else {
-        $_SESSION['message'] = "Email not found"; 
-        $_SESSION['toastClass'] = "bg-warning";
-        header("Location: login.php"); 
+   
+        echo json_encode([
+            'status' => 'error',
+            'message' => "Email not found"
+        ]);
         exit();
     }
 
