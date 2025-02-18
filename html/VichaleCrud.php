@@ -1,5 +1,6 @@
 
-<?php include '../php/upload.php'?>
+
+ <?php include '../php/VehicleCrud.php'?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -7,20 +8,129 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vehicle Management</title>
-        
+    
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script>
-        function openForm(id, name, type, owner, number) {
-            document.getElementById("form1").style.display = "block";
-            document.getElementById("id").value = id || "";
-            document.getElementById("name").value = name || "";
-            document.getElementById("v_type").value = type || "";
-            document.getElementById("owner").value = owner || "";
-            document.getElementById("v_Number").value = number || "";
-        }
+        ///////////////////////////////////////OPEN FORM FUNCTION ADD AND EDIT FORM///////////////////
+        $(document).ready(function () {
+            function openForm(id, name, type, owner, number) {
+                $("#form1").show();
+                $("#id").val(id || "");
+                $("#name").val(name || "");
+                $("#v_type").val(type || "");
+                $("#owner").val(owner || "");
+                $("#v_Number").val(number || "");
+            }
+
+            // Submit form via AJAX
+            $("#form1").submit(function (event) {
+                event.preventDefault(); // Prevent page reload
+
+                const formData = new FormData(this);
+                /////////////////////////////////////////////ADD AJAX API ////////////////////
+                $.ajax({
+                    url: '../php/VehicleCrud.php',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Vehicle saved successfully.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            $("#form1").hide();
+                            loadVehicles(); // Reload vehicle list
+                        });
+                    },
+                    error: function() {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'There was an error while saving vehicle data.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            });
+
+/////////////////////////////////////DELETE VECHAIE AJAX API///////////////////////////////
+         
+            function confirmDelete(id) {
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "This action cannot be undone!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '../php/VehicleCrud.php',
+                            type: 'GET',
+                            data: { delete: id },
+                            success: function(response) {
+                                Swal.fire({
+                                    title: 'Deleted!',
+                                    text: 'Vehicle has been deleted.',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                }).then(() => {
+                                    loadVehicles(); // Reload vehicle list
+                                });
+                            },
+                            error: function() {
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'There was an error while deleting the vehicle.',
+                                    icon: 'error',
+                                    confirmButtonText: 'OK'
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+
+//////////////////////////////////////FETCH VECHILE USING AJAX API////////////////////
+
+            function loadVehicles() {
+                $.ajax({
+                    url: '../php/VehicleCrud.php',
+                    type: 'GET',
+                    data: { fetch: true },
+                    success: function(response) {
+                        $("tbody").html(response);
+                    },
+                    error: function() {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Failed to load vehicles.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            }
+
+            // Load vehicle list on page load
+            loadVehicles();
+
+            // Expose functions to global scope
+            window.openForm = openForm;
+            window.confirmDelete = confirmDelete;
+        });
     </script>
+
     <style>
         body {
             background-color: #f8f9fa;
@@ -30,28 +140,11 @@
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
         }
     </style>
-    <script>
-    function confirmDelete(id) {
-        Swal.fire({
-            title: "Are you sure?",
-            text: "This action cannot be undone!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#d33",
-            cancelButtonColor: "#3085d6",
-            confirmButtonText: "Yes, delete it!"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = "VichaleCrud.php?delete=" + id;
-            }
-        });
-    }
-</script>
 </head>
 <body>
     <div class="container mt-4">
         <button class="btn btn-primary mb-3" onclick="openForm()"><i class="fa fa-plus"></i> Add New Vehicle</button>
-        
+
         <form id="form1" method="POST" enctype="multipart/form-data" class="card p-4" style="display: none;">
             <h2 class="mb-3 text-center"><i class="fa fa-car"></i> Vehicle Form</h2>
             <input type="hidden" id="id" name="id">
@@ -61,13 +154,12 @@
                 <input class="form-control" id="name" name="name">
             </div>
             <div class="mb-2">
-            <label for="cars"><i class="fa fa-truck"></i>Vichale Type</label> 
-                 <select id="v_type" name="v_type" class="form-control">
-                    <option label="car">Car</option>
-                    <option label="Bike">Bike</option>
+                <label for="cars"><i class="fa fa-truck"></i> Vehicle Type</label>
+                <select id="v_type" name="v_type" class="form-control">
+                    <option value="Car">Car</option>
+                    <option value="Bike">Bike</option>
                 </select>
             </div>
-            
             <div class="mb-2">
                 <label><i class="fa fa-user"></i> Owner Name</label>
                 <input class="form-control" id="owner" name="owner">
@@ -86,7 +178,7 @@
             </div>
             <div class="text-center">
                 <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Save</button>
-                <button type="button" class="btn btn-danger" onclick="document.getElementById('form1').style.display='none'"><i class="fa fa-times"></i> Cancel</button>
+                <button type="button" class="btn btn-danger" onclick="$('#form1').hide()"><i class="fa fa-times"></i> Cancel</button>
             </div>
         </form>
 
@@ -94,7 +186,7 @@
         <table class="table table-bordered table-hover">
             <thead class="table-dark">
                 <tr>
-                   <th>SrNo</th>
+                    <th>SrNo</th>
                     <th>Image</th>
                     <th>Name</th>
                     <th>Type</th>
@@ -105,38 +197,7 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($vehicles as $vehicle) : ?>
-                    <tr>
-                        <td><?= htmlspecialchars($vehicle["id"]) ?></td>
-                        <td>
-                            <?php if (!empty($vehicle["vichalephto"])): ?>
-                                <img src="<?= $vehicle["vichalephto"] ?>" width="80" class="rounded">
-                            <?php else: ?>
-                                No Image
-                            <?php endif; ?>
-                        </td>
-                        <td><?= htmlspecialchars($vehicle["vichalename"]) ?></td>
-                        <td><?= htmlspecialchars($vehicle["vichaletype"]) ?></td>
-                        <td><?= htmlspecialchars($vehicle["ownername"]) ?></td>
-                        <td><?= htmlspecialchars($vehicle["vichlenumber"]) ?></td>
-                        <td>
-                            <?php if (!empty($vehicle["rcBookfile"])): ?>
-                                <a href="<?= $vehicle["rcBookfile"] ?>" target="_blank" class="btn btn-info btn-sm"><i class="fa fa-file-pdf"></i> View</a>
-                            <?php else: ?>
-                                No RC Book
-                            <?php endif; ?>
-                        </td>
-                        <td>
-                            <button class="btn btn-warning btn-sm" onclick="openForm('<?= $vehicle['id'] ?>', '<?= $vehicle['vichalename'] ?>', '<?= $vehicle['vichaletype'] ?>', '<?= $vehicle['ownername'] ?>', '<?= $vehicle['vichlenumber'] ?>')"><i class="fa fa-edit"></i> Edit</button>
-                        
-    <button class="btn btn-danger" onclick="confirmDelete(<?= $vehicle['id'] ?>)">
-        <i class="fa fa-trash"></i> Delete
-    </button>
-</td>
-
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
+                <!-- Vehicle list will be dynamically inserted here -->
             </tbody>
         </table>
     </div>

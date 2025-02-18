@@ -1,37 +1,28 @@
+
 <?php
 session_start();
+include '../includes/Connection.php';
 
-if (!isset($_SESSION['user'])) {
-    session_unset();
-    session_destroy();
-    header("Location: login.php");
-    exit();
-}
 
+////////////////////////////////////////THIS IS THE USER ASSASATIVE ARRAY GET THE RESSPOMCE FROM LOGIN PAGE DAYNAMICALLY//////////////
 $user = $_SESSION['user']; 
-
-////////////////////////////////////////////////////CALL THAT ASSOCATVE ARRAYHERE FOR FETCH USER PROFILE VALUES ////////////////////////////
-
-$user = $_SESSION['user'];
-
+//used the real escape sstring to avoid special charascter 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $phone = $_POST['phone'];
-
-    include '../includes/Connection.php';
+    $name = mysqli_real_escape_string($mysqli, $_POST['name']);
+    $email = mysqli_real_escape_string($mysqli, $_POST['email']);
+    $phone = mysqli_real_escape_string($mysqli, $_POST['phone']);
+    
+/////////////////////////////////////////////////EDIT THAT USER ARRAY USING SQL AND ID /////////////////////
     $userId = $user['id'];
-//////////////////////////////////////////////////////////UPDATE USER PFOFILE //////////////////////////////////////////////////////////
-
     $sql = "UPDATE users SET name='$name', email='$email', phone='$phone' WHERE id='$userId'";
+    
     if (mysqli_query($mysqli, $sql)) {
         $_SESSION['user']['name'] = $name;
         $_SESSION['user']['email'] = $email;
         $_SESSION['user']['phone'] = $phone;
-        header("Location: index.php");
-        exit();
+        echo "success";
     } else {
-        echo "Error updating record: " . mysqli_error($mysqli);
+        echo "error";
     }
+    exit();
 }
-?>

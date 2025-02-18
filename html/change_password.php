@@ -1,9 +1,3 @@
-<?php
-// Include database connection
-include '../php/cangepassword.php';
-
-
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,9 +7,7 @@ include '../php/cangepassword.php';
     <title>Change Password</title>
     <link rel="stylesheet" href="../css/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <?php if ($redirect) : ?>
-        <meta http-equiv="refresh" content="3;url=login.php">
-    <?php endif; ?>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div class="container mt-5">
@@ -24,17 +16,8 @@ include '../php/cangepassword.php';
                 <div class="card p-4">
                     <h3 class="text-center">Change Password</h3>
                     <hr>
-                    <?php if (!empty($message)) : ?>
-                        <div class="alert alert-info"><?php echo $message; ?></div>
-                        <?php if ($redirect) : ?>
-                            <script>
-                                setTimeout(function () {
-                                    window.location.href = 'login.php';
-                                }, 3000); 
-                            </script>
-                        <?php endif; ?>
-                    <?php endif; ?>
-                    <form method="POST">
+                    <div id="message" class="alert d-none"></div>
+                    <form id="changePasswordForm">
                         <div class="mb-3">
                             <label>Email:</label>
                             <input type="email" name="email" class="form-control" required>
@@ -60,5 +43,37 @@ include '../php/cangepassword.php';
             </div>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            $("#changePasswordForm").submit(function (event) {
+                event.preventDefault(); // Prevent form submission
+///////////////////////////////////////CHANGE PASSWORD API//////////////////////////////////////
+                $.ajax({
+                    url: '../php/changePassword.php',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    dataType: 'json',
+                    //Show the error message 
+                    success: function (response) {
+                         const messageDiv = $("#message");
+                        messageDiv.removeClass("d-none alert-danger alert-success");
+                   //or it wwill add the class of success message if risponce is correct and refirect to login 
+                        if (response.status) {
+                            messageDiv.addClass("alert-success").text(response.message);
+                            setTimeout(function () {
+                                window.location.href = "login.php";
+                            }, 3000);
+                        } else {
+                            messageDiv.addClass("alert-danger").text(response.message);
+                        }
+                    },
+                    error: function () {
+                        $("#message").removeClass("d-none").addClass("alert-danger").text("An error occurred. Please try again.");
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

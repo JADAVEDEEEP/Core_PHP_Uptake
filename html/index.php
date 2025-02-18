@@ -86,16 +86,37 @@ include '../php/index.php';
         }
     </style>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+
+        //change the javascript buttons into the jqery and perom hide and show
         function showEditForm() {
-            document.getElementById("editForm").style.display = "block";
-            document.getElementById("userDetails").style.display = "none";
+            $("#editForm").show();
+            $("#userDetails").hide();
         }
 
         function hideEditForm() {
-            document.getElementById("editForm").style.display = "none";
-            document.getElementById("userDetails").style.display = "block";
+            $("#editForm").hide();
+            $("#userDetails").show();
         }
+        //Edit execution since we hit the edit that will get the risponce from back url as fiels 
+        $(document).ready(function() {
+            $("#editProfileForm").submit(function(e) {
+                e.preventDefault(); // Prevent default form submission
+
+ /////////////////////////////////////EDIT PROFILE API/////////////////////////////////////////
+                $.ajax({
+                    url: "../php/index.php",
+                    type: "POST",
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        if (response.trim() === "success") {
+                            location.reload();
+                        }
+                    }
+                });
+            });
+        });
     </script>
 </head>
 <body>
@@ -158,7 +179,7 @@ include '../php/index.php';
                         <div id="editForm" style="display: none;">
                             <h3 class="text-center">Edit Your Details</h3>
                             <hr>
-                            <form method="POST">
+                            <form id="editProfileForm" method="POST">
                                 <div class="mb-3">
                                     <label>Name:</label>
                                     <input type="text" name="name" class="form-control" value="<?php echo htmlspecialchars($user['name']); ?>" required>

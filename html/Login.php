@@ -1,7 +1,6 @@
 <?php
-include '../php/Login.php';
+include '../php/Login.php'
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -78,25 +77,7 @@ include '../php/Login.php';
 
 <body>
     <div class="login-container shadow-lg">
-        <!-- Display Toast Messages -->
-        <?php if (isset($_SESSION['message'])): ?>
-            <div class="toast align-items-center text-white <?php echo $_SESSION['toastClass']; ?> border-0" role="alert"
-                aria-live="assertive" aria-atomic="true">
-                <div class="d-flex">
-                    <div class="toast-body">
-                        <?php 
-                        echo $_SESSION['message']; 
-                        unset($_SESSION['message']); 
-                        unset($_SESSION['toastClass']);
-                        ?>
-                    </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-            </div>
-        <?php endif; ?>
-
-        <!-- Login Form -->
-        <form id="loginForm" action="javascript:void(0);">
+        <form id="loginForm">
             <div class="text-center">
                 <i class="fa fa-user-circle fa-4x mb-3 text-primary"></i>
                 <h5 class="mb-4">Login Into Your Account</h5>
@@ -127,7 +108,8 @@ include '../php/Login.php';
 
                 const email = $('#email').val();
                 const password = $('#password').val();
-
+                
+////////////////////////////LOGIN API /////////////////////////////////////////////////
                 $.ajax({
                     type: "POST",
                     url: "Login.php", 
@@ -154,6 +136,7 @@ include '../php/Login.php';
                             });
                         }
                     },
+                    //if no reosponce found from the url backend file it will retrun error 
                     error: function () {
                         Swal.fire({
                             icon: 'error',

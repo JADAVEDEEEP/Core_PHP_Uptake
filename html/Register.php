@@ -99,6 +99,8 @@
 //DEFINE THE ERROR VARIABLES TO STORE THE BACKEND RISPONCE USING SWAL FIRE MESSAGE S 
         $('#nameError, #emailError, #phoneError, #passwordError, #alertMessage').html('');
 
+////////////////////////////////////////////REGSITER API//////////////////////////////////////
+
         $.ajax({
           url: '../php/Register.php', 
           type: 'POST',
@@ -130,7 +132,7 @@
                 $('#emailError').text(response.errors.emailErr);
                 $('#phoneError').text(response.errors.phoneErr);
                 $('#passwordError').text(response.errors.passwordErr);
-              } else {
+              } else {s
                 $('#alertMessage').html('<div class="alert alert-danger">' + response.message + '</div>');
               }
             }

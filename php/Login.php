@@ -22,11 +22,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 'email' => $email,
                 'phone' => $phone,
             ];
-
-            $_SESSION['message'] = "Login successful. Welcome, $name!";
-            $_SESSION['toastClass'] = "bg-success";
-            
-          
             echo json_encode([
                 'status' => 'success',
                 'message' => "Login successful. Welcome, $name!"
