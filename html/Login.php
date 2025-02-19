@@ -1,6 +1,4 @@
-<?php
-include '../php/Login.php'
-?>
+<?php include '../php/Login.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,12 +7,12 @@ include '../php/Login.php'
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Add jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="../css/login.css">
     <title>Login Page</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
- body {
+        body {
             background: linear-gradient(to right, #8e44ad, #3498db);
             font-family: 'Poppins', sans-serif;
             height: 100vh;
@@ -28,10 +26,6 @@ include '../php/Login.php'
             border-radius: 8px;
             padding: 20px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
         }
         .login-container h5 {
             font-weight: bold;
@@ -59,19 +53,18 @@ include '../php/Login.php'
             opacity: 0.8;
         }
         .social-icons a {
-            font-size: 24px;
+            font-size: 20px;
             transition: 0.3s;
             margin: 0 10px;
         }
         .social-icons a:hover {
-            font-size: 45px;
+            font-size: 25px;
             color: #8e44ad;
         }
         label {
             font-size: 14px;
             font-weight: 600;
         }
-    </style>
     </style>
 </head>
 
@@ -84,51 +77,60 @@ include '../php/Login.php'
             </div>
             <div class="mb-3">
                 <label for="email"><i class="fa fa-envelope"></i> Email</label>
-                <input type="text" name="email" id="email" class="form-control" required>
+                <input type="text" name="email" id="email" class="form-control" placeholder="Enter your email">
             </div>
             <div class="mb-3">
                 <label for="password"><i class="fa fa-lock"></i> Password</label>
-                <input type="password" name="password" id="password" class="form-control" required>
+                <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password">
             </div>
             <button type="submit" class="btn btn-success mb-4 w-100">Login</button>
-            <div class="d-flex justify-content:space-between">
+            <div class="d-flex justify-content-between">
                 <p><a href="./register.php" class="text-primary fw-bold mx-4">Create Account</a>  <a href="../html/forgot-password.php" class="text-primary fw-bold">Forgot Password</a></p>
             </div>
-        
+            <!-- Social Media Login -->
+            <div class="text-center social-icons">
+                <a href="#" class="text-primary"><i class="fa fa-facebook-square"></i></a>
+                <a href="#" class="text-danger"><i class="fa fa-google"></i></a>
+                <a href="#" class="text-primary"><i class="fa fa-windows"></i></a>
+            </div>
         </form>
     </div>
-    
-    </div>
 
-   
     <script>
         $(document).ready(function () {
             $('#loginForm').on('submit', function (e) {
-                e.preventDefault(); 
+                e.preventDefault();
 
                 const email = $('#email').val();
                 const password = $('#password').val();
-                
-////////////////////////////LOGIN API /////////////////////////////////////////////////
+
+                // Empty field validation
+                if (email === "" || password === "") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Please fill in all fields.',
+                        showConfirmButton: true
+                    });
+                    return;
+                }
+
                 $.ajax({
                     type: "POST",
-                    url: "Login.php", 
+                    url: "Login.php",
                     data: {email: email, password: password},
                     success: function (response) {
                         const res = JSON.parse(response);
 
                         if (res.status === "success") {
-                           
                             Swal.fire({
                                 icon: 'success',
                                 title: res.message,
                                 showConfirmButton: false,
                                 timer: 1500
                             }).then(() => {
-                                window.location.href = 'index.php'; 
+                                window.location.href = 'index.php';
                             });
                         } else {
-
                             Swal.fire({
                                 icon: 'error',
                                 title: res.message,
@@ -136,7 +138,6 @@ include '../php/Login.php'
                             });
                         }
                     },
-                    //if no reosponce found from the url backend file it will retrun error 
                     error: function () {
                         Swal.fire({
                             icon: 'error',

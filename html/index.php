@@ -101,10 +101,42 @@ include '../php/index.php';
         }
         //Edit execution since we hit the edit that will get the risponce from back url as fiels 
         $(document).ready(function() {
-            $("#editProfileForm").submit(function(e) {
-                e.preventDefault(); // Prevent default form submission
+        $("#editProfileForm").submit(function(e) {
+            e.preventDefault(); // Prevent default form submission
+            
+            const isValid = true;
+            const name = $("#name").val();
+            const email = $("#email").val();
+            const phone = $("#phone").val();
 
- /////////////////////////////////////EDIT PROFILE API/////////////////////////////////////////
+            // Validate Name
+            if (name.trim() === "") {
+                $("#nameError").show();
+                isValid = false;
+            } else {
+                $("#nameError").hide();
+            }
+
+          
+            const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            if (!emailPattern.test(email)) {
+                $("#emailError").show();
+                isValid = false;
+            } else {
+                $("#emailError").hide();
+            }
+
+      
+            const phonePattern = /^[0-9]{10}$/;
+            if (!phonePattern.test(phone)) {
+                $("#phoneError").show();
+                isValid = false;
+            } else {
+                $("#phoneError").hide();
+            }
+
+            if (isValid) {
+               
                 $.ajax({
                     url: "../php/index.php",
                     type: "POST",
@@ -115,33 +147,20 @@ include '../php/index.php';
                         }
                     }
                 });
-            });
+            }
         });
+    })
     </script>
 </head>
 <body>
 
     <!-- Sidebar -->
-    <div class="sidebar">
-        <h3 class="fw-bold">CarDekho</h3>
-        <ul class="nav flex-column">
-            <button class="btn btn-toggle fw-bold">🏠 Dashboard</button>
-            <a href="../html/VichaleCrud.php">
-                <button class="btn btn-toggle fw-bold">🚗 Add Vehicle</button>
-            </a>
-        </ul>
-    </div>
+   <?php include '../html/Sidebar.php'?>
 
     <!-- Dashboard Content -->
-    <div class="content">
+   
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-sm navbar-light bg-white shadow-sm mb-4">
-            <div class="container">
-                <div class="collapse navbar-collapse justify-content-end">
-                    <a href="logout.php" class="btn btn-danger">Logout</a>
-                </div>
-            </div>
-        </nav>
+        
 
         <!-- Profile Card -->
         <div class="container mt-3">
@@ -177,31 +196,30 @@ include '../php/index.php';
 
                         <!-- Edit Profile Form -->
                         <div id="editForm" style="display: none;">
-                            <h3 class="text-center">Edit Your Details</h3>
-                            <hr>
-                            <form id="editProfileForm" method="POST">
-                                <div class="mb-3">
-                                    <label>Name:</label>
-                                    <input type="text" name="name" class="form-control" value="<?php echo htmlspecialchars($user['name']); ?>" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Email:</label>
-                                    <input type="email" name="email" class="form-control" value="<?php echo htmlspecialchars($user['email']); ?>" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Phone:</label>
-                                    <input type="text" name="phone" class="form-control" value="<?php echo htmlspecialchars($user['phone']); ?>" required>
-                                </div>
-                                <div class="text-center">
-                                    <button type="submit" class="btn btn-success">✅ Save Changes</button>
-                                    <button type="button" class="btn btn-secondary" onclick="hideEditForm()">❌ Cancel</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>  
-                </div>
-            </div>
-        </div> 
-    </div>
+    <h3 class="text-center">Edit Your Details</h3>
+    <hr>
+    <form id="editProfileForm" method="POST">
+        <div class="mb-3">
+            <label>Name:</label>
+            <input type="text" name="name" class="form-control" value="<?php echo htmlspecialchars($user['name']); ?>" id="name" />
+            <div id="nameError" class="text-danger" style="display: none;">Please enter your name.</div>
+        </div>
+        <div class="mb-3">
+            <label>Email:</label>
+            <input type="text" name="email" class="form-control" value="<?php echo htmlspecialchars($user['email']); ?>" id="email" />
+            <div id="emailError" class="text-danger" style="display: none;">Please enter a valid email address.</div>
+        </div>
+        <div class="mb-3">
+            <label>Phone:</label>
+            <input type="text" name="phone" class="form-control" value="<?php echo htmlspecialchars($user['phone']); ?>" id="phone" />
+            <div id="phoneError" class="text-danger" style="display: none;">Please enter a valid phone number.</div>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-success">✅ Save Changes</button>
+            <button type="button" class="btn btn-secondary" onclick="hideEditForm()">❌ Cancel</button>
+        </div>
+    </form>
+</div>
+
 </body>
 </html>

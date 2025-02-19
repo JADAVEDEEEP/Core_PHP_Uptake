@@ -1,6 +1,8 @@
 
 
- <?php include '../php/VehicleCrud.php'?>
+ <?php 
+ include '../html/Sidebar.php';
+ include '../php/VehicleCrud.php'?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -139,11 +141,46 @@
             border-radius: 10px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
         }
+        
+.nineteen {
+    border-radius: 4px;
+    background: linear-gradient(to right, #67b26b, #4ca2cb);
+    color: #fff;
+    padding: 20px 0;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.nineteen span {
+    position: relative;
+    transition: 400ms;
+}
+
+.nineteen span::after {
+    content: '\00bb';
+    position: absolute; 
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 500ms;
+}
+
+.nineteen:hover span {
+    padding-right: 25px;
+}
+
+.nineteen:hover span::after {
+    opacity: 1;
+    right: 0;
+}
     </style>
 </head>
 <body>
     <div class="container mt-4">
-        <button class="btn btn-primary mb-3" onclick="openForm()"><i class="fa fa-plus"></i> Add New Vehicle</button>
+
+    <button class="nineteen btn btn-primary rounded-pill w-25 text-center mb-3" onclick="openForm()">Add vehicle
+  <i class="fas fa-plus fa-lg"></i>
+</button>
 
         <form id="form1" method="POST" enctype="multipart/form-data" class="card p-4" style="display: none;">
             <h2 class="mb-3 text-center"><i class="fa fa-car"></i> Vehicle Form</h2>
@@ -197,7 +234,7 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Vehicle list will be dynamically inserted here -->
+                
             </tbody>
         </table>
     </div>

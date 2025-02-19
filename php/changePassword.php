@@ -1,4 +1,3 @@
-
 <?php
 // Include database connection
 include '../includes/Connection.php';
@@ -9,18 +8,33 @@ header('Content-Type: application/json'); // Set response as JSON
 $response = ['status' => false, 'message' => ''];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
+    // Get input values
     $old_password = $_POST['old_password'];
     $new_password = $_POST['new_password'];
     $confirm_password = $_POST['confirm_password'];
 
-    if (empty($email) || empty($old_password) || empty($new_password) || empty($confirm_password)) {
-        $response['message'] = "All fields are required!";
+    // Check if any field is empty
+    if (empty($old_password) || empty($new_password) || empty($confirm_password)) {
+        $response['message'] = "All fields are required.";
         echo json_encode($response);
         exit();
     }
 
-    // Fetch the current password from the database using email
+    // Validate password length
+    if (strlen($new_password) < 6) {
+        $response['message'] = "New password must be at least 6 characters long.";
+        echo json_encode($response);
+        exit();
+    }
+
+    if ($new_password !== $confirm_password) {
+        $response['message'] = "New password and confirm password do not match.";
+        echo json_encode($response);
+        exit();
+    }
+
+    // Fetch the current password from the database using session email
+    $email = $_SESSION['user']['email'];
     $query = "SELECT password FROM users WHERE email = ?";
     if ($stmt = $mysqli->prepare($query)) {
         $stmt->bind_param("s", $email);
@@ -28,20 +42,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_result($db_password);
         $stmt->fetch();
         $stmt->close();
-//////////////////////////////////VALIDATION TROUGH DATABASE//////////////////////////// 
+
+        // Check if the old password matches the one in the database
         if (!$db_password) {
             $response['message'] = "No account found with this email!";
         } elseif (!password_verify($old_password, $db_password)) {
             $response['message'] = "Old password is incorrect!";
         } elseif ($old_password === $new_password) {
             $response['message'] = "New password cannot be the same as the old password!";
-        } elseif ($new_password !== $confirm_password) {
-            $response['message'] = "New password and confirm password do not match!";
         } else {
-            // Hash the new password
+            // Hash the new password and update in the database
             $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
-
-            // Update password in the database
             $update_query = "UPDATE users SET password = ? WHERE email = ?";
             if ($stmt = $mysqli->prepare($update_query)) {
                 $stmt->bind_param("ss", $hashed_password, $email);
@@ -59,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// it will retun the response in to the json fromat 
+// Return response as JSON
 echo json_encode($response);
 exit();
 ?>

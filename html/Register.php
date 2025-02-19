@@ -62,25 +62,25 @@
     <form id="registerForm">
       <div class="mb-2 text-start">
         <label for="username"><i class="fa fa-user"></i> Username</label>
-        <input type="text" name="name" id="username" class="form-control" placeholder="Enter your name">
+        <input type="text" name="name" id="username" class="form-control" placeholder="Only letters and whitespace allowed">
         <span class="error text-danger" id="nameError"></span>
       </div>
 
       <div class="mb-2 text-start">
         <label for="email"><i class="fa fa-envelope"></i> Email</label>
-        <input type="email" name="email" id="email" class="form-control" placeholder="Enter your email">
+        <input type="text" name="email" id="email" class="form-control" placeholder="Email Should be New or Valid">
         <span class="error text-danger" id="emailError"></span>
       </div>
 
       <div class="mb-2 text-start">
         <label for="phone"><i class="fa fa-phone"></i> Phone</label>
-        <input type="text" name="phone" id="phone" class="form-control" placeholder="Enter your phone number">
+        <input type="text" name="phone" id="phone" class="form-control" placeholder="phone number format (10 digits required)">
         <span class="error text-danger" id="phoneError"></span>
       </div>
 
       <div class="mb-3 text-start">
         <label for="password"><i class="fa fa-lock"></i> Password</label>
-        <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password">
+        <input type="password" name="password" id="password" class="form-control" placeholder="Password Must Be 8 Characters">
         <span class="error text-danger" id="passwordError"></span>
       </div>
 

@@ -6,19 +6,19 @@ $nameErr = $emailErr = $phoneErr = $passwordErr = "";
 $isValid = true;
 $response = array();
 
-// function to santize hthe input 
+// function to santize the input 
 function test_input($data) {
     return htmlspecialchars(stripslashes(trim($data)));
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-   //santize inputs 
+    // sanitize inputs 
     $name = test_input($_POST['name']);
     $email = test_input($_POST['email']);
     $password = test_input($_POST['password']);
     $phone = test_input($_POST['phone']);
 
-    // validtion for the name 
+    // validation for the name 
     if (empty($name)) {
         $nameErr = "Name is required";
         $isValid = false;
@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $isValid = false;
     }
 
-    // Validate foor the phone 
+    // Validate for the phone 
     if (empty($phone)) {
         $phoneErr = "Phone number is required";
         $isValid = false;
@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $isValid = false;
     }
 
-    // Validattion for the passworf 
+    // Validate for the password 
     if (empty($password)) {
         $passwordErr = "Password is required";
         $isValid = false;
@@ -67,19 +67,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    // Escape email for the query and check for duplicate email
+    // Escape email and phone for the query and check for duplicate email or phone
     $emailEscaped = mysqli_real_escape_string($mysqli, $email);
+    $phoneEscaped = mysqli_real_escape_string($mysqli, $phone);
+
+    // Check for duplicate email
     $checkEmailQuery = "SELECT email FROM users WHERE email = '$emailEscaped'";
     $checkEmailResult = mysqli_query($mysqli, $checkEmailQuery);
 
     if (!$checkEmailResult) {
-        $response['status']  = 'error';
+        $response['status'] = 'error';
         $response['message'] = "Error checking email: " . mysqli_error($mysqli);
         echo json_encode($response);
         exit;
     } elseif (mysqli_num_rows($checkEmailResult) > 0) {
-        $response['status']  = 'info';
+        $response['status'] = 'info';
         $response['message'] = "Email ID already exists";
+        echo json_encode($response);
+        exit;
+    }
+
+    // Check for duplicate phone number
+    $checkPhoneQuery = "SELECT phone FROM users WHERE phone = '$phoneEscaped'";
+    $checkPhoneResult = mysqli_query($mysqli, $checkPhoneQuery);
+
+    if (!$checkPhoneResult) {
+        $response['status'] = 'error';
+        $response['message'] = "Error checking phone number: " . mysqli_error($mysqli);
+        echo json_encode($response);
+        exit;
+    } elseif (mysqli_num_rows($checkPhoneResult) > 0) {
+        $response['status'] = 'info';
+        $response['message'] = "Phone number already exists";
         echo json_encode($response);
         exit;
     } else {
@@ -90,10 +109,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         mysqli_stmt_bind_param($stmt, "ssss", $name, $email, $phone, $hashedPassword);
         
         if (mysqli_stmt_execute($stmt)) {
-            $response['status']  = 'success';
+            $response['status'] = 'success';
             $response['message'] = 'Account created successfully';
         } else {
-            $response['status']  = 'error';
+            $response['status'] = 'error';
             $response['message'] = "Error: " . mysqli_error($mysqli);
         }
         mysqli_stmt_close($stmt);

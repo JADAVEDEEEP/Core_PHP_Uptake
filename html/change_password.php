@@ -1,4 +1,6 @@
-
+<?php
+include '../html/Sidebar.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,6 +10,11 @@
     <link rel="stylesheet" href="../css/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .password-eye {
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
@@ -19,21 +26,29 @@
                     <div id="message" class="alert d-none"></div>
                     <form id="changePasswordForm">
                         <div class="mb-3">
-                            <label>Email:</label>
-                            <input type="email" name="email" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
                             <label>Old Password:</label>
-                            <input type="password" name="old_password" class="form-control" required>
+                            <div class="input-container" style="position: relative;">
+                                <input type="password" name="old_password" class="form-control" id="old_password" placeholder="Enter your old password">
+                                <span class="password-eye" id="toggleOldPassword" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">👁️</span>
+                            </div>
                         </div>
+
                         <div class="mb-3">
                             <label>New Password:</label>
-                            <input type="password" name="new_password" class="form-control" required>
+                            <div class="input-container" style="position: relative;">
+                                <input type="password" name="new_password" class="form-control" id="new_password" placeholder="Enter your new password">
+                                <span class="password-eye" id="toggleNewPassword" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">👁️</span>
+                            </div>
                         </div>
+
                         <div class="mb-3">
                             <label>Confirm New Password:</label>
-                            <input type="password" name="confirm_password" class="form-control" required>
+                            <div class="input-container" style="position: relative;">
+                                <input type="password" name="confirm_password" class="form-control" id="confirm_password" placeholder="Confirm your new password">
+                                <span class="password-eye" id="toggleConfirmPassword" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">👁️</span>
+                            </div>
                         </div>
+
                         <div class="text-center">
                             <button type="submit" class="btn btn-success">Change Password</button>
                             <a href="index.php" class="btn btn-secondary">Cancel</a>
@@ -46,19 +61,37 @@
 
     <script>
         $(document).ready(function () {
+            $("#toggleOldPassword").click(function () {
+                let input = $("#old_password");
+                let type = input.attr("type") === "password" ? "text" : "password";
+                input.attr("type", type);
+            });
+            $("#toggleNewPassword").click(function () {
+                let input = $("#new_password");
+                let type = input.attr("type") === "password" ? "text" : "password";
+                input.attr("type", type);
+            });
+            $("#toggleConfirmPassword").click(function () {
+                let input = $("#confirm_password");
+                let type = input.attr("type") === "password" ? "text" : "password";
+                input.attr("type", type);
+            });
+
+            // Submit the form
             $("#changePasswordForm").submit(function (event) {
-                event.preventDefault(); // Prevent form submission
-///////////////////////////////////////CHANGE PASSWORD API//////////////////////////////////////
+                event.preventDefault();
+
+                // Clear any previous messages
+                const messageDiv = $("#message");
+                messageDiv.removeClass("d-none alert-danger alert-success");
+
                 $.ajax({
                     url: '../php/changePassword.php',
                     type: 'POST',
                     data: $(this).serialize(),
                     dataType: 'json',
-                    //Show the error message 
                     success: function (response) {
-                         const messageDiv = $("#message");
                         messageDiv.removeClass("d-none alert-danger alert-success");
-                   //or it wwill add the class of success message if risponce is correct and refirect to login 
                         if (response.status) {
                             messageDiv.addClass("alert-success").text(response.message);
                             setTimeout(function () {
@@ -69,7 +102,7 @@
                         }
                     },
                     error: function () {
-                        $("#message").removeClass("d-none").addClass("alert-danger").text("An error occurred. Please try again.");
+                        messageDiv.removeClass("d-none").addClass("alert-danger").text("An error occurred. Please try again.");
                     }
                 });
             });

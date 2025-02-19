@@ -6,6 +6,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
+    // Check if fields are empty
+    if (empty($email) || empty($password)) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Please fill in all fields'
+        ]);
+        exit();
+    }
+
     $stmt = $mysqli->prepare("SELECT id, name, email, phone, password FROM users WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
@@ -28,7 +37,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ]);
             exit();
         } else {
-           
             echo json_encode([
                 'status' => 'error',
                 'message' => "Incorrect password"
@@ -36,7 +44,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
     } else {
-   
         echo json_encode([
             'status' => 'error',
             'message' => "Email not found"
