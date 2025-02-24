@@ -1,100 +1,130 @@
 <?php
-
 include '../includes/Connection.php';
 
-// Change this to point to the assets folder
-$uploadDir = "../php/assets";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $action = $_POST['action'];
 
-// Function to upload files to the assets folder
-function uploadFile($file, $uploadDir) {
-    // Ensure the assets folder exists
-    if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0777, true);
+    if ($action == "add" || $action == "update") {
+        $name = $_POST['name'];
+        $number_plate = $_POST['number_plate'];
+        $rc_book_no = $_POST['rc_book_no'];
+        $type_id = $_POST['type_id'];
+        $color_ids = $_POST['color_id'];
+        $vehicle_id = isset($_POST['vehicle_id']) ? $_POST['vehicle_id'] : null;
+
+        $uploadDir = '../uploads/rc_books/';
+        if (!file_exists($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
+        $rcBookFileName = time() . "_" . basename($_FILES['rc_book_filepath']['name']); 
+        $rcBookFilePath = $uploadDir . $rcBookFileName;
+        /////////////////////////////////////////////////////ADD OR UPDATE API////////////////////////////////
+
+        if ($action == "add" || ($action == "update" && !empty($_FILES['rc_book_filepath']['name']))) {
+            if (move_uploaded_file($_FILES['rc_book_filepath']['tmp_name'], $rcBookFilePath)) {
+                if ($action == "add") {
+                    $stmt = $mysqli->prepare("INSERT INTO vehicle (name, number_plate, rc_book_no, rc_book_filepath, type_id) VALUES (?, ?, ?, ?, ?)");
+                    $stmt->bind_param("ssssi", $name, $number_plate, $rc_book_no, $rcBookFilePath, $type_id);
+                    $stmt->execute();
+                    $vehicle_id = $stmt->insert_id;
+                    $stmt->close();
+                } else {
+                    $stmt = $mysqli->prepare("UPDATE vehicle SET name = ?, number_plate = ?, rc_book_no = ?, rc_book_filepath = ?, type_id = ? WHERE id = ?");
+                    $stmt->bind_param("ssssii", $name, $number_plate, $rc_book_no, $rcBookFilePath, $type_id, $vehicle_id);
+                    $stmt->execute();
+                    $stmt->close();
+                }
+
+                // Delete existing color associations
+                $mysqli->query("DELETE FROM vehicle_color WHERE vehicle_id = $vehicle_id");
+
+                // Insert new color associations
+                foreach ($color_ids as $color_id) {
+                    $stmt = $mysqli->prepare("INSERT INTO vehicle_color (vehicle_id, color_id) VALUES (?, ?)");
+                    $stmt->bind_param("ii", $vehicle_id, $color_id);
+                    $stmt->execute();
+                    $stmt->close();
+                }
+
+                echo json_encode(["status" => "success", "message" => "Vehicle " . ($action == "add" ? "added" : "updated") . " successfully!"]);
+            } else {
+                echo json_encode(["status" => "error", "message" => "File upload failed!"]);
+            }
+        } else {
+            $stmt = $mysqli->prepare("UPDATE vehicle SET name = ?, number_plate = ?, rc_book_no = ?, type_id = ? WHERE id = ?");
+            $stmt->bind_param("sssii", $name, $number_plate, $rc_book_no, $type_id, $vehicle_id);
+            $stmt->execute();
+            $stmt->close();
+
+            // Delete existing color associations
+            $mysqli->query("DELETE FROM vehicle_color WHERE vehicle_id = $vehicle_id");
+
+            // Insert new color associations
+            foreach ($color_ids as $color_id) {
+                $stmt = $mysqli->prepare("INSERT INTO vehicle_color (vehicle_id, color_id) VALUES (?, ?)");
+                $stmt->bind_param("ii", $vehicle_id, $color_id);
+                $stmt->execute();
+                $stmt->close();
+            }
+
+            echo json_encode(["status" => "success", "message" => "Vehicle updated successfully!"]);
+        }
     }
-    
-    // Set the target file path
-    $targetFile = $uploadDir . basename($file["name"]);
-    
-    // Move the uploaded file to the assets folder
-    if (move_uploaded_file($file["tmp_name"], $targetFile)) {
-        return $targetFile;
-    } else {
-        return "";
+////////////////////////////////////////////////DELETE API///////////////////////
+    if ($action == "delete") {
+        $id = $_POST['id'];
+
+        // Fetch file path
+        $fileResult = $mysqli->query("SELECT rc_book_filepath FROM vehicle WHERE id = $id");
+        $fileRow = $fileResult->fetch_assoc();
+        if ($fileRow && file_exists($fileRow['rc_book_filepath'])) {
+            unlink($fileRow['rc_book_filepath']);  // Delete file
+        }
+
+        // Delete vehicle records
+        $mysqli->query("DELETE FROM vehicle_color WHERE vehicle_id = $id");
+        $mysqli->query("DELETE FROM vehicle WHERE id = $id");
+
+        echo json_encode(["status" => "success", "message" => "Vehicle deleted successfully!"]);
     }
+    exit;
 }
 
-// Insert or Update Vehicle
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $id = isset($_POST["id"]) ? trim($_POST["id"]) : "";
-    $name = trim($_POST["name"]);
-    $type = trim($_POST["v_type"]);
-    $owner = trim($_POST["owner"]);
-    $vehicle_number = trim($_POST["v_Number"]);
+if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['action']) && $_GET['action'] == "fetch") {
+    $id = $_GET['id'];
+    $result = $mysqli->query("SELECT * FROM vehicle WHERE id = $id");
+    $row = $result->fetch_assoc();
 
-    if (empty($name) || empty($type) || empty($owner) || empty($vehicle_number)) {
-        echo "<script>alert('All fields are required!'); window.history.back();</script>";
-        exit();
+    $color_ids = [];
+    $colors_query = $mysqli->query("SELECT color_id FROM vehicle_color WHERE vehicle_id = $id");
+    while ($color = $colors_query->fetch_assoc()) {
+        $color_ids[] = $color['color_id'];
     }
 
-    $rcBookPath = !empty($_FILES["rc_book"]["name"]) ? uploadFile($_FILES["rc_book"], $uploadDir) : "";
-    $imagePath = !empty($_FILES["image"]["name"]) ? uploadFile($_FILES["image"], $uploadDir) : "";
-
-    ////////////////////////////////////////////ADD OR EDIT BASED ON THE CONDTION ////////////////////////
-    if (!empty($id)) {
-        // Update operation
-        $stmt = $mysqli->prepare("UPDATE vehicles SET vichalename=?, vichaletype=?, ownername=?, vichlenumber=?, vichalephto=IFNULL(?, vichalephto), rcBookfile=IFNULL(?, rcBookfile) WHERE id=?");
-        $stmt->bind_param("ssssssi", $name, $type, $owner, $vehicle_number, $imagePath, $rcBookPath, $id);
-    } else {
-        // Insert operation
-        $stmt = $mysqli->prepare("INSERT INTO vehicles (vichalename, vichaletype, ownername, vichlenumber, vichalephto, rcBookfile) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssss", $name, $type, $owner, $vehicle_number, $imagePath, $rcBookPath);
-    }
-
-    if ($stmt->execute()) {
-        echo "success";
-    } else {
-        echo "error";
-    }
+    $row['color_ids'] = $color_ids;
+    echo json_encode($row);
+    exit;
 }
 
-///////////////////////////////////////////////////DELETE VEHICLE///////////////////////////
+//////////////////////////////////////////////GET API ////////////////////////////////////
+$vehicles = [];
+$result = $mysqli->query("SELECT v.*, t.name as type_name FROM vehicle v INNER JOIN type t ON v.type_id = t.id");
+while ($row = $result->fetch_assoc()) {
+    $vehicle_id = $row['id'];
+    $color_names = [];
+    $colors_query = $mysqli->query("SELECT c.name FROM vehicle_color vc JOIN color c ON vc.color_id = c.id WHERE vc.vehicle_id = $vehicle_id");
 
-if (isset($_GET["delete"])) {
-    $id = $_GET["delete"];
-    $stmt = $mysqli->prepare("DELETE FROM vehicles WHERE id = ?");
-    $stmt->bind_param("i", $id);
-    if ($stmt->execute()) {
-        echo "success";
+    while ($color = $colors_query->fetch_assoc()) {
+        $color_names[] = $color['name'];
     }
+    $row['colors'] = implode(', ', $color_names);
+
+    // Convert file path to a web-accessible URL
+    $row['rc_book_filepath'] = str_replace('../', '', $row['rc_book_filepath']);
+
+    $vehicles[] = $row;
 }
 
-///////////////////////////////////////////FETCH VEHILES///////////////////////////
-
-if (isset($_GET['fetch'])) {
-    $stmt = $mysqli->prepare("SELECT * FROM vehicles");
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $vehicleList = "";
-    
-    $count = 1;
-    while ($row = $result->fetch_assoc()) {
-        $vehicleList .= "<tr>
-                            <td>{$count}</td>
-                            <td><img src='{$row['vichalephto']}' width='50'></td>
-                            <td>{$row['vichalename']}</td>
-                            <td>{$row['vichaletype']}</td>
-                            <td>{$row['ownername']}</td>
-                            <td>{$row['vichlenumber']}</td>
-                            <td><a href='{$row['rcBookfile']}' target='_blank'>View</a></td>
-                            <td>
-                                <button class='btn btn-warning' onclick='openForm({$row['id']}, \"{$row['vichalename']}\", \"{$row['vichaletype']}\", \"{$row['ownername']}\", \"{$row['vichlenumber']}\")'><i class='fa fa-edit'></i> Edit</button>
-                                <button class='btn btn-danger' onclick='confirmDelete({$row['id']})'><i class='fa fa-trash'></i> Delete</button>
-                            </td>
-                          </tr>";
-        $count++;
-    }
-    echo $vehicleList;
-}
-
-$mysqli->close();
+echo json_encode(["vehicles" => $vehicles]);
 ?>

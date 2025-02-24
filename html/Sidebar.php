@@ -94,12 +94,10 @@
         <a href="../html/index.php">
                 <button class="btn btn-toggle fw-bold">Home Page</button>
             </a>
-            <a href="../html/VichaleCrud.php">
+            <a href="../html/VichaleCrudhtml.php">
                 <button class="btn btn-toggle fw-bold">List Vehicle</button>
             </a>
-            <a href="../html/ColorCrud.php">
-                <button class="btn btn-toggle fw-bold">Color Crud</button>
-            </a>
+
             
         </ul>
     </div>
