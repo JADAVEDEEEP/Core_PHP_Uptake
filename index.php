@@ -7,10 +7,10 @@
 </head>
 <body>
     <?php
-    function deep($a){
-        echo $a;
+    function hackthon($b){
+        echo $b;
     } 
-    deep(10);
+    hackthon(10);
     
     ?>
 </body>
