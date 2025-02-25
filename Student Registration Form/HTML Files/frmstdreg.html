@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Registration</title>
+		<link rel="stylesheet" href="frmstdreg.css">
+	</head>
+	<body>
+		<form name="frmreg" action="" method="get">
+			<br><br>
+			<font>
+				<table cellspacing="11";>
+				<tr>
+					<td colspan="2"><h1><u>STUDENT REGISTRATION FORM</u></h1></td>
+				</tr>
+				<tr></tr>
+				<tr>
+					<th>First Name</th>
+					<td><input type="text" name="fname" maxlength="30" placeholder="Enter First Name" required pattern="[A-Za-z]{2,30}" title="Minimum 2 Character And Maximum 30 Character Required">(Max 30 Characters)</td>
+				</tr>
+				<tr>
+					<th>Last Name</th>
+					<td><input type="text" name="lname" maxlength="30" placeholder="Enter Last Name" pattern="[A-Za-z]{2,30}" title="Minimum 2 Character And Maximum 30 Character Required">(Max 30 Characters)</td>
+				</tr>
+				<tr>
+					<th>Contact</th>
+					<td>
+						<select name="code" size="3" multiple="multiple">
+							<option value="091">091</option>
+							<option value="092">092</option>
+							<option value="093">093</option>
+							<option value="094">094</option>
+						</select>
+						<input type="text" name="contact" placeholder="98232*****" required pattern="[0-9]{10}" title="Enter Valid Contact Number Of 10 Digits">
+					</td>
+				<tr align="center">
+					<td colspan="2">
+						<input class="button" type="submit" name="submit" value="Submit">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input class="button" type="reset" name="reset" value="Reset">
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+				</tr>
+				</table>
+			</font>
+		</form>
+	</body>
+</html>

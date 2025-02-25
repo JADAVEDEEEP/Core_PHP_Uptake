@@ -1,0 +1,34 @@
+body
+{
+	background-image:url('bg3.jpg');
+	background-size:cover;
+}
+	
+table
+{
+	margin-left:auto;
+	margin-right:auto;
+	background-color:rgba(0,0,0,0.4);
+	border-radius:20px;
+	height:600;
+	width:550;
+}
+	
+font
+{
+	color:white;
+}
+
+th
+{
+	text-align:left;
+}
+	
+.button
+{
+	width:125px;
+	height:35px;
+	background-color:black;
+	font-size:100%;
+	color:red;
+}
